@@ -1,4 +1,5 @@
 /server/target/
+/server/.idea/
 
 /.idea
 /server/words.db
