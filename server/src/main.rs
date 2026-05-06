@@ -21,9 +21,7 @@ async fn main() -> anyhow::Result<()> {
         .init();
     start_message(&config);
 
-    run_app(config).await?;
-
-    Ok(())
+    run_app(config).await
 }
 
 fn start_message(config: &AppConfig) {

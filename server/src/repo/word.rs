@@ -1,5 +1,5 @@
 use crate::handler::CreateWord;
-use crate::model::{Word, WordId};
+use crate::model::WordId;
 use sqlx::SqlitePool;
 
 pub async fn create_word(word: CreateWord, pool: &SqlitePool) -> anyhow::Result<WordId> {

@@ -1,0 +1,14 @@
+[package]
+name = "wordbin-extension"
+version = "0.1.0"
+edition = "2024"
+license = "Apache-2.0"
+authors = ["Dennis S. Dale <dennis.s.dale@icloud.com>"]
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+leptos = { version = "0.8.19", features = ["csr"] }
+wasm-bindgen = "0.2"
+web-sys = { version = "0.3", features = ["Window", "Storage"] }

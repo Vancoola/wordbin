@@ -3,3 +3,6 @@
 /.idea
 /server/words.db
 /server/.env
+/wordbin-extension/target/
+/wordbin-extension/dist/
+/wordbin-extension/pkg/

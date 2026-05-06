@@ -10,7 +10,8 @@ pub struct Word {
     pub notes: String,
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, sqlx::Type)]
+#[sqlx(transparent)]
 pub struct WordId(i64);
 impl WordId {
     pub fn new(id: i64) -> Self {
