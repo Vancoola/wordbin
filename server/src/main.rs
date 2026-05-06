@@ -1,6 +1,9 @@
 mod boot;
 mod error;
 mod handler;
+mod model;
+mod openapi;
+mod repo;
 mod state;
 
 use crate::boot::run_app;

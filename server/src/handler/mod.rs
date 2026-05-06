@@ -1,10 +1,19 @@
-use crate::error::AppError;
+use crate::handler::word::add_word;
 use crate::state::AppState;
-use axum::debug_handler;
-use axum::extract::State;
-use axum::http::StatusCode;
+use axum::Router;
+use axum::routing::post;
+use serde::Deserialize;
+use utoipa::ToSchema;
 
-#[debug_handler]
-pub async fn add_word(State(app_state): State<AppState>) -> Result<StatusCode, AppError> {
-    Ok(StatusCode::CREATED)
+pub mod word;
+
+pub fn word_router() -> Router<AppState> {
+    Router::new().route("/add", post(add_word))
+}
+
+#[derive(Debug, Deserialize, ToSchema)]
+pub struct CreateWord {
+    pub word: String,
+    pub source: String,
+    pub notes: String,
 }

@@ -2,3 +2,4 @@
 
 /.idea
 /server/words.db
+/server/.env
