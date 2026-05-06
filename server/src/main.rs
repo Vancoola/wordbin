@@ -1,4 +1,5 @@
 mod boot;
+mod config;
 mod error;
 mod handler;
 mod model;
@@ -7,22 +8,28 @@ mod repo;
 mod state;
 
 use crate::boot::run_app;
+use crate::config::{AppConfig, load_config};
+use std::str::FromStr;
 use tracing::{Level, info};
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
-    tracing_subscriber::fmt().with_max_level(Level::INFO).init();
-    start_message();
+    let config = load_config();
 
-    run_app().await?;
+    tracing_subscriber::fmt()
+        .with_max_level(Level::from_str(&config.server.tracing_level).unwrap_or(Level::INFO))
+        .init();
+    start_message(&config);
+
+    run_app(config).await?;
 
     Ok(())
 }
 
-fn start_message() {
+fn start_message(config: &AppConfig) {
     info!("---------------------------");
     info!("  wordbin v{}", env!("CARGO_PKG_VERSION"));
     info!("  by {}", env!("CARGO_PKG_AUTHORS"));
-    info!("  → http://{}", 123);
+    info!("  → http://{}:{}", config.server.host, config.server.port);
     info!("---------------------------");
 }

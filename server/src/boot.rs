@@ -1,3 +1,4 @@
+use crate::config::AppConfig;
 use crate::handler::word_router;
 use crate::openapi::ApiDoc;
 use crate::state::AppState;
@@ -12,7 +13,7 @@ use tracing::trace;
 use utoipa::OpenApi;
 use utoipa_swagger_ui::SwaggerUi;
 
-pub(crate) async fn run_app() -> anyhow::Result<()> {
+pub(crate) async fn run_app(app_config: AppConfig) -> anyhow::Result<()> {
     let pool = database().await?;
     let cors = cors_layer()?;
 
@@ -24,7 +25,7 @@ pub(crate) async fn run_app() -> anyhow::Result<()> {
         .layer(cors)
         .with_state(state);
 
-    let addr = format!("{}:{}", "0.0.0.0", 1234);
+    let addr = format!("{}:{}", app_config.server.host, app_config.server.port);
     let listener = tokio::net::TcpListener::bind(addr).await?;
     axum::serve(listener, app).await?;
 

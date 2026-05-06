@@ -7,7 +7,9 @@ authors = ["Dennis S. Dale <dennis.s.dale@icloud.com>"]
 
 [dependencies]
 tokio = { version = "1.52", features = ["macros", "rt-multi-thread"] }
+
 async-trait = "0.1.89"
+figment = { version = "0.10.19", features = ["toml"] }
 
 anyhow = "1.0"
 
