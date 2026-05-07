@@ -1,7 +1,7 @@
+use crate::Page;
 use icondata::LuArrowLeft;
 use leptos::prelude::*;
 use leptos_icons::Icon;
-use crate::Page;
 
 #[component]
 pub fn WordsPage(set_page: WriteSignal<Page>) -> impl IntoView {

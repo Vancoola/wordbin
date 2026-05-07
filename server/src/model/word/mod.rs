@@ -2,7 +2,9 @@ pub mod object;
 
 use crate::model::word::object::{Status, WordId};
 use serde::Serialize;
+use time::format_description::well_known::Rfc3339;
 use time::OffsetDateTime;
+use wordbin_types::WordResponse;
 
 #[derive(Debug, Serialize, sqlx::FromRow)]
 pub struct Word {
@@ -13,4 +15,16 @@ pub struct Word {
     pub added_at: OffsetDateTime,
     pub notes: Option<String>,
     pub status: Status,
+}
+
+impl From<Word> for WordResponse {
+    fn from(value: Word) -> Self {
+        Self {
+            id: value.id.0,
+            word: value.word,
+            source: value.source,
+            status: value.status.to_string(),
+            added_at: value.added_at.format(&Rfc3339).unwrap_or_default(),
+        }
+    }
 }

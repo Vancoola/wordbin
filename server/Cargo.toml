@@ -6,6 +6,9 @@ license = "Apache-2.0"
 authors = ["Dennis S. Dale <dennis.s.dale@icloud.com>"]
 
 [dependencies]
+
+wordbin-types = { path = "../wordbin-types", features = ["utoipa"] }
+
 tokio = { version = "1.52", features = ["macros", "rt-multi-thread"] }
 
 async-trait = "0.1.89"

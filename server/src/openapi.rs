@@ -1,7 +1,7 @@
-use crate::handler::CreateWord;
 use crate::handler::word::__path_active_word_handler;
 use crate::handler::word::__path_add_word_handler;
 use utoipa::OpenApi;
+use wordbin_types::CreateWord;
 
 #[derive(OpenApi)]
 #[openapi(

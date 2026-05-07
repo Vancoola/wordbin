@@ -1,0 +1,10 @@
+[package]
+name = "wordbin-types"
+version = "0.1.0"
+edition = "2024"
+license = "Apache-2.0"
+authors = ["Dennis S. Dale <dennis.s.dale@icloud.com>"]
+
+[dependencies]
+serde = { version = "1.0.228", features = ["derive"] }
+utoipa = { version = "5.4.0", optional = true }

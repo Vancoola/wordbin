@@ -2232,6 +2232,15 @@ dependencies = [
  "tracing-subscriber",
  "utoipa",
  "utoipa-swagger-ui",
+ "wordbin-types",
+]
+
+[[package]]
+name = "wordbin-types"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "utoipa",
 ]
 
 [[package]]

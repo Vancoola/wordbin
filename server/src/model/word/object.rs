@@ -1,4 +1,5 @@
 use serde::Serialize;
+use std::fmt;
 
 #[derive(Debug, Serialize, sqlx::Type)]
 #[sqlx(type_name = "TEXT", rename_all = "lowercase")]
@@ -16,10 +17,19 @@ impl From<String> for Status {
         }
     }
 }
+impl fmt::Display for Status {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Status::New => write!(f, "new"),
+            Status::Known => write!(f, "known"),
+            Status::Learning => write!(f, "learning"),
+        }
+    }
+}
 
 #[derive(Debug, Serialize, sqlx::Type)]
 #[sqlx(transparent)]
-pub struct WordId(i64);
+pub struct WordId(pub i64);
 impl WordId {
     pub fn new(id: i64) -> Self {
         WordId(id)
