@@ -1,3 +1,5 @@
+use crate::Page;
+use crate::i18n::use_i18n;
 use icondata::{LuCaseSensitive, LuCirclePlus, LuGlobe, LuList, LuSettings};
 use js_sys::futures::JsFuture;
 use leptos::prelude::*;
@@ -6,10 +8,9 @@ use leptos_i18n::{t, t_string};
 use leptos_icons::Icon;
 use wasm_bindgen::JsValue;
 use wasm_bindgen::prelude::wasm_bindgen;
-use crate::i18n::use_i18n;
 
 #[component]
-pub fn PopupPage(on_settings: impl Fn() + 'static) -> impl IntoView {
+pub fn PopupPage(set_page: WriteSignal<Page>) -> impl IntoView {
     let (source, set_source) = signal(String::new());
 
     let i18n = use_i18n();
@@ -64,10 +65,10 @@ pub fn PopupPage(on_settings: impl Fn() + 'static) -> impl IntoView {
       <div class="footer">
           <span class="count" id="count">{t!(i18n, words_saved)}</span>
           <div class="footer-icons">
-              <button title={move || t_string!(i18n, all_words)}>
+              <button on:click=move |_| set_page.set(Page::Words) title={move || t_string!(i18n, all_words)}>
                   <Icon icon=LuList />
               </button>
-              <button on:click=move |_| on_settings() title={move || t_string!(i18n, settings)} id="settings-btn">
+              <button on:click=move |_| set_page.set(Page::Settings) title={move || t_string!(i18n, settings)} id="settings-btn">
                   <Icon icon=LuSettings />
               </button>
           </div>

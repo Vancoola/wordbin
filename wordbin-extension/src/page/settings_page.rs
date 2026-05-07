@@ -1,18 +1,18 @@
-use std::str::FromStr;
+use crate::i18n::*;
 use icondata::{LuArrowLeft, LuGlobe, LuSave};
 use leptos::prelude::*;
 use leptos_icons::Icon;
-use crate::i18n::*;
+use std::str::FromStr;
+use crate::Page;
 
 #[component]
-pub fn SettingsPage(on_back: impl Fn() + 'static) -> impl IntoView {
-
+pub fn SettingsPage(set_page: WriteSignal<Page>) -> impl IntoView {
     let i18n = use_i18n();
 
     view! {
         <div class="header">
             <div class="header-left">
-                <button class="back-btn" title={move || t_string!(i18n, back)} on:click=move |_| on_back()>
+                <button class="back-btn" title={move || t_string!(i18n, back)} on:click=move |_| set_page.set(Page::Popup)>
                     <Icon icon=LuArrowLeft width="14px" height="14px" />
                 </button>
                 <span class="page-title">{t!(i18n, settings_lower)}</span>

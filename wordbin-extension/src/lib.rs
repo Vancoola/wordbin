@@ -1,18 +1,19 @@
 mod page;
 
+use crate::i18n::I18nContextProvider;
 use crate::page::popup_page::PopupPage;
 use crate::page::settings_page::SettingsPage;
+use crate::page::words_page::WordsPage;
 use leptos::prelude::*;
 use wasm_bindgen::prelude::*;
-use crate::i18n::I18nContextProvider;
 
 include!(concat!(env!("OUT_DIR"), "/i18n/mod.rs"));
-
 
 #[derive(Clone, PartialEq)]
 enum Page {
     Popup,
     Settings,
+    Words,
 }
 
 #[component]
@@ -23,10 +24,13 @@ fn App() -> impl IntoView {
         <I18nContextProvider>
             {move || match page.get() {
                 Page::Popup => view! {
-                    <PopupPage on_settings=move || set_page.set(Page::Settings) />
+                    <PopupPage set_page />
                 }.into_any(),
                 Page::Settings => view! {
-                    <SettingsPage on_back=move || set_page.set(Page::Popup) />
+                    <SettingsPage set_page />
+                }.into_any(),
+                Page::Words => view! {
+                    <WordsPage set_page />
                 }.into_any(),
             }}
         </I18nContextProvider>

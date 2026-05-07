@@ -384,3 +384,84 @@ select:focus { border-color: #2e4a2e; }
     align-items: center;
     gap: 10px;
 }
+
+/* words page */
+.search-bar {
+    padding: 12px 16px 8px;
+    border-bottom: 0.5px solid #191919;
+}
+
+.filter-bar {
+    display: flex;
+    gap: 6px;
+    padding: 8px 16px;
+    border-bottom: 0.5px solid #191919;
+}
+
+.filter-btn {
+    flex: 1;
+    height: 26px;
+    background: #141414;
+    border: 0.5px solid #242424;
+    border-radius: 4px;
+    color: #444;
+    font-family: inherit;
+    font-size: 10px;
+    cursor: pointer;
+    letter-spacing: 0.04em;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.filter-btn.active {
+    background: #1a2a1a;
+    border-color: #2e4a2e;
+    color: #6fff8a;
+}
+
+.word-list {
+    max-height: 260px;
+    overflow-y: auto;
+}
+
+.word-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    border-bottom: 0.5px solid #141414;
+    cursor: pointer;
+    transition: background 0.1s;
+}
+
+.word-row:hover { background: #121212; }
+.word-row:last-of-type { border-bottom: none; }
+
+.word-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.word-name {
+    font-size: 12px;
+    color: #d0d0d0;
+}
+
+.word-meta {
+    font-size: 9px;
+    color: #2e2e2e;
+}
+
+.word-status {
+    font-size: 9px;
+    border-radius: 3px;
+    padding: 2px 7px;
+    border: 0.5px solid;
+    flex-shrink: 0;
+}
+
+.status-new      { color: #2a4a2a; background: #111f11; border-color: #1e3a1e; }
+.status-learning { color: #2a3a4a; background: #0f1f2a; border-color: #1e3040; }
+.status-known    { color: #3a3a2a; background: #1f1f0f; border-color: #3a3a1e; }
+
+.sentinel { height: 1px; }
