@@ -11,6 +11,14 @@ use wasm_bindgen::JsValue;
 use wasm_bindgen::prelude::wasm_bindgen;
 use wordbin_types::CreateWord;
 
+#[derive(Clone, PartialEq)]
+enum ToastState {
+    Hidden,
+    EmptyWord,
+    EmptySource,
+    ServerError,
+}
+
 #[component]
 pub fn PopupPage(set_page: WriteSignal<Page>) -> impl IntoView {
     let i18n = use_i18n();
@@ -19,7 +27,7 @@ pub fn PopupPage(set_page: WriteSignal<Page>) -> impl IntoView {
     let (source, set_source) = signal(String::new());
     let (notes, set_notes) = signal(String::new());
     let (loading, set_loading) = signal(false);
-    let (error, set_error) = signal(false);
+    let (toast, set_toast) = signal(ToastState::Hidden);
 
     spawn_local(async move {
         if let Some(url) = get_current_url().await {
@@ -31,11 +39,17 @@ pub fn PopupPage(set_page: WriteSignal<Page>) -> impl IntoView {
     let on_save = move || {
         let word_val = word.get();
         if word_val.is_empty() {
+            set_toast.set(ToastState::EmptyWord);
+            return;
+        }
+        
+        if source.get().is_empty() {
+            set_toast.set(ToastState::EmptySource);
             return;
         }
 
         set_loading.set(true);
-        set_error.set(false);
+        set_toast.set(ToastState::ServerError);
 
         let payload = CreateWord {
             word: word_val,
@@ -49,7 +63,7 @@ pub fn PopupPage(set_page: WriteSignal<Page>) -> impl IntoView {
                     set_word.set(String::new());
                     set_notes.set(String::new());
                 }
-                Err(_) => set_error.set(true),
+                Err(_) => set_toast.set(ToastState::ServerError),
             }
             set_loading.set(false);
         });
@@ -93,8 +107,17 @@ pub fn PopupPage(set_page: WriteSignal<Page>) -> impl IntoView {
               {t!(i18n, save_word)}
           </button>
 
-        <div class=("toast", move || true) class=("error", error) class=("show", error)>
-            "server unreachable"
+        <div
+            class="toast"
+            class:error=move || toast.get() != ToastState::Hidden
+            class:show=move || toast.get() != ToastState::Hidden
+        >
+            {move || match toast.get() {
+                ToastState::EmptyWord   => t_string!(i18n, error_empty_word),
+                ToastState::EmptySource => t_string!(i18n, error_empty_source),
+                ToastState::ServerError => t_string!(i18n, error_server),
+                ToastState::Hidden      => "",
+            }}
         </div>
 
       </div>
