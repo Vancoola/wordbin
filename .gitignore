@@ -3,6 +3,8 @@
 
 /.idea
 /server/words.db
+/server/words.db-shm
+/server/words.db-wal
 /server/.env
 /wordbin-extension/target/
 /wordbin-extension/dist/

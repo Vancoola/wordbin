@@ -1,13 +1,19 @@
 use crate::handler::CreateWord;
-use crate::model::WordId;
+use crate::model::word::object::WordId;
 use sqlx::SqlitePool;
+use time::OffsetDateTime;
 
-pub async fn create_word(word: CreateWord, pool: &SqlitePool) -> anyhow::Result<WordId> {
+pub async fn create_new_word(word: CreateWord, pool: &SqlitePool) -> anyhow::Result<WordId> {
+
+    let added = OffsetDateTime::now_utc();
+
     let word_id = sqlx::query!(
-        "INSERT INTO words (word, source, notes) VALUES (?, ?, ?)",
+        "INSERT INTO words (word, source, notes, status, added_at) VALUES (?, ?, ?, ?, ?)",
         word.word,
         word.source,
-        word.notes
+        word.notes,
+        "new",
+        added,
     )
     .execute(pool)
     .await?

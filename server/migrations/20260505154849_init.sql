@@ -2,8 +2,9 @@ CREATE TABLE words
 (
     id       INTEGER PRIMARY KEY,
     word     TEXT NOT NULL,
-    source   TEXT,                   -- "netflix", "browser", "manual"
+    source   TEXT NOT NULL ,                   
     added_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    status   TEXT NOT NULL CHECK (status IN ('known', 'learning', 'new')),
     notes    TEXT
 );
 

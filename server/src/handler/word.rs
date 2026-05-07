@@ -1,7 +1,8 @@
 use crate::error::AppError;
 use crate::handler::CreateWord;
-use crate::model::WordId;
-use crate::repo::word::create_word;
+use crate::model::word::object::WordId;
+use crate::repo::review::create_review;
+use crate::repo::word::create_new_word;
 use crate::state::AppState;
 use axum::extract::State;
 use axum::http::StatusCode;
@@ -13,6 +14,8 @@ pub async fn add_word(
     State(app_state): State<AppState>,
     Json(payload): Json<CreateWord>,
 ) -> Result<(StatusCode, Json<WordId>), AppError> {
-    let word_id = create_word(payload, &app_state.db).await?;
+    let word_id = create_new_word(payload, &app_state.db).await?;
+    create_review(&word_id, &app_state.db).await?;
+
     Ok((StatusCode::CREATED, Json(word_id)))
 }
