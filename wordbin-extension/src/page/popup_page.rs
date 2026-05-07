@@ -8,12 +8,18 @@ use leptos_i18n::{t, t_string};
 use leptos_icons::Icon;
 use wasm_bindgen::JsValue;
 use wasm_bindgen::prelude::wasm_bindgen;
+use wordbin_types::CreateWord;
+use crate::api::add_word;
 
 #[component]
 pub fn PopupPage(set_page: WriteSignal<Page>) -> impl IntoView {
-    let (source, set_source) = signal(String::new());
-
     let i18n = use_i18n();
+
+    let (word, set_word)     = signal(String::new());
+    let (source, set_source) = signal(String::new());
+    let (notes, set_notes)   = signal(String::new());
+    let (loading, set_loading) = signal(false);
+    let (error, set_error)   = signal(false);
 
     spawn_local(async move {
         if let Some(url) = get_current_url().await {
@@ -21,6 +27,31 @@ pub fn PopupPage(set_page: WriteSignal<Page>) -> impl IntoView {
             set_source.set(hostname);
         }
     });
+
+    let on_save = move || {
+        let word_val = word.get();
+        if word_val.is_empty() { return; }
+
+        set_loading.set(true);
+        set_error.set(false);
+
+        let payload = CreateWord {
+            word: word_val,
+            source: source.get(),
+            notes: notes.get(),
+        };
+
+        spawn_local(async move {
+            match add_word(payload).await {
+                Ok(_) => {
+                    set_word.set(String::new());
+                    set_notes.set(String::new());
+                }
+                Err(_) => set_error.set(true),
+            }
+            set_loading.set(false);
+        });
+    };
 
     view! {
       <div class="header">
@@ -36,7 +67,7 @@ pub fn PopupPage(set_page: WriteSignal<Page>) -> impl IntoView {
               <label>{t!(i18n, word_label)}</label>
               <div class="input-wrap">
                   <Icon icon=LuCaseSensitive />
-                  <input id="word-input" type="text" placeholder={move || t_string!(i18n, word_placeholder)} autocomplete="off" spellcheck="false" />
+                  <input prop:value=word on:input=move |e| set_word.set(event_target_value(&e)) id="word-input" type="text" placeholder={move || t_string!(i18n, word_placeholder)} autocomplete="off" spellcheck="false" />
               </div>
           </div>
 
@@ -44,18 +75,18 @@ pub fn PopupPage(set_page: WriteSignal<Page>) -> impl IntoView {
               <label>{t!(i18n, source_label)}" "<span class="hint" id="auto-hint">{t!(i18n, source_hint)}</span></label>
               <div class="input-wrap">
                   <Icon icon=LuGlobe />
-                  <input prop:value=source id="source-input" type="text" placeholder={move || t_string!(i18n, source_placeholder)} autocomplete="off" spellcheck="false" />
+                  <input prop:value=source on:input=move |e| set_source.set(event_target_value(&e)) id="source-input" type="text" placeholder={move || t_string!(i18n, source_placeholder)} autocomplete="off" spellcheck="false" />
               </div>
           </div>
 
           <div class="field">
               <label>{t!(i18n, notes_label)}" "<span class="hint">{t!(i18n, notes_hint)}</span></label>
               <div class="notes-wrap">
-                  <textarea id="notes-input" rows="2" placeholder={move || t_string!(i18n, notes_placeholder)}></textarea>
+                  <textarea prop:value=notes on:input=move |e| set_notes.set(event_target_value(&e)) id="notes-input" rows="2" placeholder={move || t_string!(i18n, notes_placeholder)}></textarea>
               </div>
           </div>
 
-          <button class="save-btn" id="save-btn">
+          <button on:click=move |_| on_save() class="save-btn" id="save-btn">
               <Icon icon=LuCirclePlus />
               {t!(i18n, save_word)}
           </button>

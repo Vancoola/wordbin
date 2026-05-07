@@ -1,3 +1,4 @@
+mod api;
 mod page;
 
 use crate::i18n::I18nContextProvider;
@@ -5,6 +6,7 @@ use crate::page::popup_page::PopupPage;
 use crate::page::settings_page::SettingsPage;
 use crate::page::words_page::WordsPage;
 use leptos::prelude::*;
+use reqwest::Client;
 use wasm_bindgen::prelude::*;
 
 include!(concat!(env!("OUT_DIR"), "/i18n/mod.rs"));
@@ -39,5 +41,6 @@ fn App() -> impl IntoView {
 
 #[wasm_bindgen(start)]
 pub fn run() {
+    console_error_panic_hook::set_once();
     mount_to_body(App);
 }
