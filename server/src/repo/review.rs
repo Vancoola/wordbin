@@ -1,5 +1,4 @@
 use crate::model::word::object::WordId;
-use anyhow::Context;
 use sqlx::SqlitePool;
 use time::{Duration, OffsetDateTime};
 

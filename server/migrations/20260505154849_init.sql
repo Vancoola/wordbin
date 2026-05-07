@@ -3,7 +3,7 @@ CREATE TABLE words
     id       INTEGER PRIMARY KEY,
     word     TEXT NOT NULL,
     source   TEXT NOT NULL ,                   
-    added_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    added_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
     status   TEXT NOT NULL CHECK (status IN ('known', 'learning', 'new')),
     notes    TEXT
 );

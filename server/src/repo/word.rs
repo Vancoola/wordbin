@@ -1,10 +1,10 @@
 use crate::handler::CreateWord;
+use crate::model::word::Word;
 use crate::model::word::object::WordId;
 use sqlx::SqlitePool;
 use time::OffsetDateTime;
 
 pub async fn create_new_word(word: CreateWord, pool: &SqlitePool) -> anyhow::Result<WordId> {
-
     let added = OffsetDateTime::now_utc();
 
     let word_id = sqlx::query!(
@@ -20,4 +20,17 @@ pub async fn create_new_word(word: CreateWord, pool: &SqlitePool) -> anyhow::Res
     .last_insert_rowid();
 
     Ok(WordId::new(word_id))
+}
+
+pub async fn active_words(pool: &SqlitePool) -> anyhow::Result<Vec<Word>> {
+    let words = sqlx::query_as!(
+        Word,
+        "SELECT id, word, source, status, added_at, notes
+         FROM words
+         WHERE status != 'known'
+         ORDER BY added_at DESC"
+    )
+    .fetch_all(pool)
+    .await?;
+    Ok(words)
 }
