@@ -6,7 +6,6 @@ use crate::page::popup_page::PopupPage;
 use crate::page::settings_page::SettingsPage;
 use crate::page::words_page::WordsPage;
 use leptos::prelude::*;
-use reqwest::Client;
 use wasm_bindgen::prelude::*;
 
 include!(concat!(env!("OUT_DIR"), "/i18n/mod.rs"));

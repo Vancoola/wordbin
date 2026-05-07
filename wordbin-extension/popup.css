@@ -188,16 +188,13 @@ textarea {
 .footer-icons button:hover { color: #444; }
 
 .toast {
-    position: fixed;
-    bottom: 48px;
-    left: 16px;
-    right: 16px;
+    margin-top: 10px;
     padding: 9px 12px;
     border-radius: 6px;
     font-size: 11px;
     letter-spacing: 0.06em;
     opacity: 0;
-    transform: translateY(6px);
+    transform: translateY(4px);
     transition: opacity 0.2s, transform 0.2s;
     pointer-events: none;
 }

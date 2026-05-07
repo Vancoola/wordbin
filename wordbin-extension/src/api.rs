@@ -1,7 +1,6 @@
-use std::sync::OnceLock;
 use reqwest::Client;
+use std::sync::OnceLock;
 use wordbin_types::{CreateWord, WordCreatedId};
-
 
 static CLIENT: OnceLock<Client> = OnceLock::new();
 
