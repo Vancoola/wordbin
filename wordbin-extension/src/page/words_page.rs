@@ -30,15 +30,17 @@ pub fn WordsPage(set_page: WriteSignal<Page>) -> impl IntoView {
     let (loading, set_loading) = signal(false);
 
     let load_more = move || {
-        if loading.get_untracked() || !has_more.get_untracked() { return; }
+        if loading.get_untracked() || !has_more.get_untracked() {
+            return;
+        }
         set_loading.set(true);
 
         let current_offset = offset.get_untracked();
         let status = match filter.get_untracked() {
-            WordFilter::All      => None,
-            WordFilter::New      => Some("new".to_string()),
+            WordFilter::All => None,
+            WordFilter::New => Some("new".to_string()),
             WordFilter::Learning => Some("learning".to_string()),
-            WordFilter::Known    => Some("known".to_string()),
+            WordFilter::Known => Some("known".to_string()),
         };
 
         spawn_local(async move {

@@ -12,6 +12,7 @@ pub fn word_router() -> Router<AppState> {
         .route("/active", get(active_word_handler))
 }
 
+#[utoipa::path(get, path = "/healthz", tag = "status")]
 pub async fn health_check() -> axum::http::StatusCode {
     axum::http::StatusCode::OK
 }

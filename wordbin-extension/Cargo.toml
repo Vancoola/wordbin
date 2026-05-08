@@ -35,3 +35,14 @@ icondata = { version = "0.7.0", features = ["font-awesome", "lucide"]}
 url = "2.5.8"
 
 
+[lints.clippy]
+pedantic = { level = "warn", priority = -1 }
+perf = { level = "warn", priority = -1 }
+must_use_candidate = "allow"
+unwrap_used = "deny"
+panic = "deny"
+todo = "warn"
+unreachable = "warn"
+enum_glob_use = "deny"
+explicit_iter_loop = "warn"
+redundant_closure_for_method_calls = "warn"

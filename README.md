@@ -90,7 +90,7 @@ Swagger UI available at `http://localhost:3000/swagger-ui`.
 ```bash
 cd wordbin-extension
 wasm-pack build --target web --out-dir dist/pkg --release
-cp manifest.json index.html popup.css bootstrap.js dist/
+cp manifest.json index.html popup.css bootstrap.js dist/ && cp -r icons dist/
 ```
 
 Then load `wordbin-extension/dist/` into Chrome:
