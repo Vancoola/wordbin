@@ -1,0 +1,13 @@
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+  <rect width="128" height="128" rx="28" fill="#0e0e0e"/>
+  <rect x="1" y="1" width="126" height="126" rx="27" fill="none" stroke="#1e1e1e" stroke-width="1"/>
+  <text x="64" y="82" text-anchor="middle"
+    font-family="'JetBrains Mono', 'Fira Code', monospace"
+    font-size="64"
+    font-weight="500"
+    fill="#6fff8a"
+    letter-spacing="-2">w</text>
+  <rect x="22" y="92" width="84" height="1.5" rx="0.75" fill="#1e1e1e"/>
+  <rect x="32" y="98" width="64" height="1.5" rx="0.75" fill="#1a1a1a"/>
+  <rect x="44" y="104" width="40" height="1.5" rx="0.75" fill="#161616"/>
+</svg>

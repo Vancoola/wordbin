@@ -49,7 +49,7 @@ pub fn PopupPage(set_page: WriteSignal<Page>) -> impl IntoView {
         }
 
         set_loading.set(true);
-        set_toast.set(ToastState::ServerError);
+        set_toast.set(ToastState::Hidden);
 
         let payload = CreateWord {
             word: word_val,
