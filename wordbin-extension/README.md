@@ -3,11 +3,11 @@
 ## release
 
 ```bash 
-  make build
+make build
 ```   
 
 ## debug
 
 ```bash 
-  make dev
+make dev
 ```     
