@@ -29,15 +29,38 @@ pub async fn word_count(pool: &SqlitePool) -> anyhow::Result<i64> {
     Ok(count)
 }
 
-pub async fn active_words(pool: &SqlitePool) -> anyhow::Result<Vec<Word>> {
-    let words = sqlx::query_as!(
-        Word,
-        "SELECT id, word, source, status, added_at, notes
-         FROM words
-         WHERE status != 'known'
-         ORDER BY added_at DESC"
-    )
-    .fetch_all(pool)
-    .await?;
-    Ok(words)
+pub async fn active_words(
+    pool: &SqlitePool,
+    limit: i64,
+    offset: i64,
+    status: Option<String>,
+) -> anyhow::Result<Vec<Word>> {
+    match status {
+        Some(s) => {
+            sqlx::query_as!(
+                Word,
+                "SELECT id, word, source, status, added_at, notes
+             FROM words WHERE status = ?
+             ORDER BY added_at DESC LIMIT ? OFFSET ?",
+                s,
+                limit,
+                offset
+            )
+            .fetch_all(pool)
+            .await
+        }
+        None => {
+            sqlx::query_as!(
+                Word,
+                "SELECT id, word, source, status, added_at, notes
+             FROM words
+             ORDER BY added_at DESC LIMIT ? OFFSET ?",
+                limit,
+                offset
+            )
+            .fetch_all(pool)
+            .await
+        }
+    }
+    .map_err(Into::into)
 }

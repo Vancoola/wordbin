@@ -22,10 +22,12 @@ pub fn SettingsPage(set_page: WriteSignal<Page>) -> impl IntoView {
     });
 
     let settings_ctx = expect_context::<RwSignal<Settings>>();
-    let (language, set_language) = signal(settings_ctx.get().language);
-    let (server_url, set_server_url) = signal(settings_ctx.get().server_url);
-    let (auto_detect, set_auto_detect) = signal(settings_ctx.get().auto_detect_source);
-    let (close_after_save, set_close_after_save) = signal(settings_ctx.get().close_after_save);
+    let initial = settings_ctx.get_untracked();
+
+    let (language, set_language) = signal(initial.language);
+    let (server_url, set_server_url) = signal(initial.server_url);
+    let (auto_detect, set_auto_detect) = signal(initial.auto_detect_source);
+    let (close_after_save, set_close_after_save) = signal(initial.close_after_save);
 
     let on_save = move || {
         let updated = Settings {

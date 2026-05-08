@@ -462,3 +462,11 @@ select:focus { border-color: #2e4a2e; }
 .status-known    { color: #3a3a2a; background: #1f1f0f; border-color: #3a3a1e; }
 
 .sentinel { height: 1px; }
+
+.loading-hint {
+    text-align: center;
+    font-size: 10px;
+    color: #2a2a2a;
+    padding: 10px;
+    letter-spacing: 0.08em;
+}

@@ -1,7 +1,7 @@
 use crate::settings::base_url;
 use reqwest::Client;
 use std::sync::OnceLock;
-use wordbin_types::{CreateWord, WordCount, WordCreatedId};
+use wordbin_types::{CreateWord, WordCount, WordCreatedId, WordResponse};
 
 static CLIENT: OnceLock<Client> = OnceLock::new();
 
@@ -38,4 +38,20 @@ pub async fn health_check() -> bool {
         .await
         .map(|r| r.status().is_success())
         .unwrap_or(false)
+}
+
+pub async fn fetch_words(
+    limit: i64,
+    offset: i64,
+    status: Option<String>,
+) -> anyhow::Result<Vec<WordResponse>> {
+    let mut req = client()
+        .get(format!("{}/word/active", base_url()))
+        .query(&[("limit", limit.to_string()), ("offset", offset.to_string())]);
+
+    if let Some(s) = status {
+        req = req.query(&[("status", s)]);
+    }
+
+    Ok(req.send().await?.json::<Vec<WordResponse>>().await?)
 }

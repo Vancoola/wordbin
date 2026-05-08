@@ -8,6 +8,13 @@ pub struct CreateWord {
     pub notes: String,
 }
 
+#[derive(Debug, Deserialize)]
+pub struct WordsQuery {
+    pub limit: Option<i64>,
+    pub offset: Option<i64>,
+    pub status: Option<String>,
+}
+
 #[derive(Debug, Serialize, Deserialize)]
 pub struct WordCreatedId(pub i64);
 
@@ -16,7 +23,7 @@ pub struct WordCount {
     pub count: i64,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct WordResponse {
     pub id: i64,
     pub word: String,
