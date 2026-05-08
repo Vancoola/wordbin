@@ -2,13 +2,13 @@ mod api;
 mod page;
 mod settings;
 
-use crate::i18n::{use_i18n, I18nContextProvider};
+use crate::i18n::{I18nContextProvider, use_i18n};
 use crate::page::popup_page::PopupPage;
 use crate::page::settings_page::SettingsPage;
 use crate::page::words_page::WordsPage;
+use crate::settings::Settings;
 use leptos::prelude::*;
 use wasm_bindgen::prelude::*;
-use crate::settings::Settings;
 
 include!(concat!(env!("OUT_DIR"), "/i18n/mod.rs"));
 
@@ -21,7 +21,6 @@ enum Page {
 
 #[component]
 fn App() -> impl IntoView {
-
     let settings = settings::load();
     provide_context(RwSignal::new(settings));
 
@@ -29,7 +28,7 @@ fn App() -> impl IntoView {
 
     view! {
         <I18nContextProvider>
-            <LocaleSync /> 
+            <LocaleSync />
             {move || match page.get() {
                 Page::Popup => view! {
                     <PopupPage set_page />

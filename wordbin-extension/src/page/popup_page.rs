@@ -42,7 +42,7 @@ pub fn PopupPage(set_page: WriteSignal<Page>) -> impl IntoView {
             set_toast.set(ToastState::EmptyWord);
             return;
         }
-        
+
         if source.get().is_empty() {
             set_toast.set(ToastState::EmptySource);
             return;

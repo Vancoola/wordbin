@@ -1,10 +1,10 @@
-use crate::{settings, Page};
 use crate::i18n::*;
+use crate::settings::Settings;
+use crate::{Page, settings};
 use icondata::{LuArrowLeft, LuGlobe, LuSave};
 use leptos::prelude::*;
 use leptos_icons::Icon;
 use std::str::FromStr;
-use crate::settings::Settings;
 
 #[component]
 pub fn SettingsPage(set_page: WriteSignal<Page>) -> impl IntoView {

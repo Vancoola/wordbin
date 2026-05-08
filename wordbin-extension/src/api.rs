@@ -1,3 +1,5 @@
+use crate::settings;
+use crate::settings::base_url;
 use reqwest::Client;
 use std::sync::OnceLock;
 use wordbin_types::{CreateWord, WordCreatedId};
@@ -9,7 +11,7 @@ fn client() -> &'static Client {
 }
 pub async fn add_word(payload: CreateWord) -> anyhow::Result<WordCreatedId> {
     let res = client()
-        .post("http://localhost:3000/word/add")
+        .post(format!("{}/word/add", base_url()))
         .json(&payload)
         .send()
         .await?

@@ -1,9 +1,8 @@
+use crate::i18n::Locale;
 use gloo::storage::{LocalStorage, Storage};
 use serde::{Deserialize, Serialize};
-use crate::i18n::Locale;
 
 const KEY: &str = "wordbin_settings";
-
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Settings {
@@ -21,6 +20,10 @@ impl Default for Settings {
             close_after_save: false,
         }
     }
+}
+
+pub fn base_url() -> String {
+    load().server_url
 }
 
 pub fn load() -> Settings {
