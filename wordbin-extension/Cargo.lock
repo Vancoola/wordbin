@@ -4726,6 +4726,7 @@ dependencies = [
  "leptos_i18n_build",
  "leptos_icons",
  "reqwest",
+ "serde",
  "url",
  "wasm-bindgen",
  "web-sys",

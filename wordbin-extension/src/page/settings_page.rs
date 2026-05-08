@@ -1,13 +1,31 @@
-use crate::Page;
+use crate::{settings, Page};
 use crate::i18n::*;
 use icondata::{LuArrowLeft, LuGlobe, LuSave};
 use leptos::prelude::*;
 use leptos_icons::Icon;
 use std::str::FromStr;
+use crate::settings::Settings;
 
 #[component]
 pub fn SettingsPage(set_page: WriteSignal<Page>) -> impl IntoView {
     let i18n = use_i18n();
+
+    let settings_ctx = expect_context::<RwSignal<Settings>>();
+    let (language, set_language) = signal(settings_ctx.get().language);
+    let (server_url, set_server_url) = signal(settings_ctx.get().server_url);
+    let (auto_detect, set_auto_detect) = signal(settings_ctx.get().auto_detect_source);
+    let (close_after_save, set_close_after_save) = signal(settings_ctx.get().close_after_save);
+
+    let on_save = move || {
+        let updated = Settings {
+            language: language.get(),
+            server_url: server_url.get(),
+            auto_detect_source: auto_detect.get(),
+            close_after_save: close_after_save.get(),
+        };
+        settings::save(&updated);
+        settings_ctx.set(updated);
+    };
 
     view! {
         <div class="header">
@@ -35,6 +53,7 @@ pub fn SettingsPage(set_page: WriteSignal<Page>) -> impl IntoView {
                             let val = event_target_value(&e);
                             let locale = Locale::from_str(&val).unwrap_or_default();
                             i18n.set_locale(locale);
+                            set_language.set(locale);
                         }
                     >
                         {Locale::get_all()
@@ -62,7 +81,10 @@ pub fn SettingsPage(set_page: WriteSignal<Page>) -> impl IntoView {
                     <span class="setting-name">{t!(i18n, server_url_label)}</span>
                     <div class="input-wrap">
                         <Icon icon=LuGlobe width="12px" height="12px" />
-                        <input type="text" id="server-url" value="http://localhost:3000" placeholder="http://localhost:3000" />
+                        <input type="text" id="server-url"
+                            prop:value=server_url
+                            on:input=move |e| set_server_url.set(event_target_value(&e))
+                            placeholder="http://localhost:3000" />
                     </div>
                 </div>
                 <div class="setting-row" style="margin-top:8px;">
@@ -81,7 +103,10 @@ pub fn SettingsPage(set_page: WriteSignal<Page>) -> impl IntoView {
                         <span class="setting-name">{t!(i18n, auto_detect_label)}</span>
                         <span class="setting-hint">{t!(i18n, auto_detect_hint)}</span>
                     </div>
-                    <div class="toggle on" id="toggle-detect">
+                    <div
+                        class="toggle"
+                        class:on=auto_detect
+                        on:click=move |_| set_auto_detect.update(|v| *v = !*v)>
                         <div class="toggle-thumb"></div>
                     </div>
                 </div>
@@ -90,13 +115,16 @@ pub fn SettingsPage(set_page: WriteSignal<Page>) -> impl IntoView {
                         <span class="setting-name">{t!(i18n, close_after_save_label)}</span>
                         <span class="setting-hint">{t!(i18n, close_after_save_hint)}</span>
                     </div>
-                    <div class="toggle" id="toggle-close">
+                    <div
+                        class="toggle"
+                        class:on=close_after_save
+                        on:click=move |_| set_close_after_save.update(|v| *v = !*v)>
                         <div class="toggle-thumb"></div>
                     </div>
                 </div>
             </div>
 
-            <button class="save-btn" id="save-btn">
+            <button on:click=move |_| on_save() class="save-btn">
                 <Icon icon=LuSave width="12px" height="12px" />
                 {t!(i18n, save_settings)}
             </button>
