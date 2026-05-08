@@ -8,7 +8,9 @@ use crate::page::settings_page::SettingsPage;
 use crate::page::words_page::WordsPage;
 use crate::settings::Settings;
 use leptos::prelude::*;
+use leptos::task::spawn_local;
 use wasm_bindgen::prelude::*;
+use wordbin_types::WordCount;
 
 include!(concat!(env!("OUT_DIR"), "/i18n/mod.rs"));
 
@@ -24,11 +26,14 @@ fn App() -> impl IntoView {
     let settings = settings::load();
     provide_context(RwSignal::new(settings));
 
+    provide_context(RwSignal::new(WordCount { count: 0 }));
+
     let (page, set_page) = signal(Page::Popup);
 
     view! {
         <I18nContextProvider>
             <LocaleSync />
+            <WordCountSync />
             {move || match page.get() {
                 Page::Popup => view! {
                     <PopupPage set_page />
@@ -51,6 +56,19 @@ fn LocaleSync() -> impl IntoView {
 
     Effect::new(move |_| {
         i18n.set_locale(settings.get().language);
+    });
+
+    view! {}
+}
+
+#[component]
+fn WordCountSync() -> impl IntoView {
+    let word_count = expect_context::<RwSignal<WordCount>>();
+
+    spawn_local(async move {
+        if let Ok(wc) = api::word_count().await {
+            word_count.set(WordCount { count: wc });
+        }
     });
 
     view! {}

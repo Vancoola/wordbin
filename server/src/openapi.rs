@@ -1,5 +1,6 @@
 use crate::handler::word::__path_active_word_handler;
 use crate::handler::word::__path_add_word_handler;
+use crate::handler::word::__path_word_count_handler;
 use utoipa::OpenApi;
 use wordbin_types::CreateWord;
 
@@ -7,6 +8,7 @@ use wordbin_types::CreateWord;
 #[openapi(
     paths (
         add_word_handler,
+        word_count_handler,
         active_word_handler
     ),
     components (

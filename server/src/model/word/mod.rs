@@ -2,8 +2,8 @@ pub mod object;
 
 use crate::model::word::object::{Status, WordId};
 use serde::Serialize;
-use time::format_description::well_known::Rfc3339;
 use time::OffsetDateTime;
+use time::format_description::well_known::Rfc3339;
 use wordbin_types::WordResponse;
 
 #[derive(Debug, Serialize, sqlx::FromRow)]

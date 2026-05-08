@@ -22,6 +22,13 @@ pub async fn create_new_word(word: CreateWord, pool: &SqlitePool) -> anyhow::Res
     Ok(WordId::new(word_id))
 }
 
+pub async fn word_count(pool: &SqlitePool) -> anyhow::Result<i64> {
+    let count = sqlx::query_scalar!("SELECT COUNT(*) FROM words")
+        .fetch_one(pool)
+        .await?;
+    Ok(count)
+}
+
 pub async fn active_words(pool: &SqlitePool) -> anyhow::Result<Vec<Word>> {
     let words = sqlx::query_as!(
         Word,

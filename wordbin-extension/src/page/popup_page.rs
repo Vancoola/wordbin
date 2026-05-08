@@ -9,7 +9,7 @@ use leptos_i18n::{t, t_string};
 use leptos_icons::Icon;
 use wasm_bindgen::JsValue;
 use wasm_bindgen::prelude::wasm_bindgen;
-use wordbin_types::CreateWord;
+use wordbin_types::{CreateWord, WordCount};
 
 #[derive(Clone, PartialEq)]
 enum ToastState {
@@ -22,6 +22,7 @@ enum ToastState {
 #[component]
 pub fn PopupPage(set_page: WriteSignal<Page>) -> impl IntoView {
     let i18n = use_i18n();
+    let word_count = expect_context::<RwSignal<WordCount>>();
 
     let (word, set_word) = signal(String::new());
     let (source, set_source) = signal(String::new());
@@ -66,6 +67,7 @@ pub fn PopupPage(set_page: WriteSignal<Page>) -> impl IntoView {
                 Err(_) => set_toast.set(ToastState::ServerError),
             }
             set_loading.set(false);
+            word_count.update(|wc| wc.count += 1);
         });
     };
 
@@ -123,7 +125,7 @@ pub fn PopupPage(set_page: WriteSignal<Page>) -> impl IntoView {
       </div>
 
       <div class="footer">
-          <span class="count" id="count">{t!(i18n, words_saved)}</span>
+          <span class="count" id="count">{move || word_count.get().count}" "{t!(i18n, words_saved)}</span>
           <div class="footer-icons">
               <button on:click=move |_| set_page.set(Page::Words) title={move || t_string!(i18n, all_words)}>
                   <Icon icon=LuList />

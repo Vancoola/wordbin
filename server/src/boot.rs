@@ -1,5 +1,5 @@
 use crate::config::AppConfig;
-use crate::handler::word_router;
+use crate::handler::{health_check, word_router};
 use crate::openapi::ApiDoc;
 use crate::state::AppState;
 use axum::Router;
@@ -8,6 +8,7 @@ use sqlx::sqlite::SqliteConnectOptions;
 use sqlx::{SqlitePool, migrate};
 use std::str::FromStr;
 use std::time::Duration;
+use axum::routing::get;
 use tower_http::cors::{AllowHeaders, AllowMethods, AllowOrigin, CorsLayer};
 use tracing::trace;
 use utoipa::OpenApi;
@@ -20,6 +21,7 @@ pub(crate) async fn run_app(app_config: AppConfig) -> anyhow::Result<()> {
     let state = AppState { db: pool.clone() };
 
     let app = Router::new()
+        .route("/healthz", get(health_check))
         .nest("/word", word_router())
         .merge(SwaggerUi::new("/swagger-ui").url("/api-docs/openapi.json", ApiDoc::openapi()))
         .layer(cors)

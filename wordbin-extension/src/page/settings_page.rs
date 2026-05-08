@@ -1,14 +1,25 @@
+use crate::api::health_check;
 use crate::i18n::*;
 use crate::settings::Settings;
 use crate::{Page, settings};
 use icondata::{LuArrowLeft, LuGlobe, LuSave};
 use leptos::prelude::*;
+use leptos::task::spawn_local;
 use leptos_icons::Icon;
 use std::str::FromStr;
 
 #[component]
 pub fn SettingsPage(set_page: WriteSignal<Page>) -> impl IntoView {
     let i18n = use_i18n();
+
+    let (online, set_online) = signal(false);
+    let (checking, set_checking) = signal(true);
+
+    spawn_local(async move {
+        let result = health_check().await;
+        set_online.set(result);
+        set_checking.set(false);
+    });
 
     let settings_ctx = expect_context::<RwSignal<Settings>>();
     let (language, set_language) = signal(settings_ctx.get().language);
@@ -26,6 +37,16 @@ pub fn SettingsPage(set_page: WriteSignal<Page>) -> impl IntoView {
         settings::save(&updated);
         settings_ctx.set(updated);
     };
+
+    Effect::new(move |_| {
+        let _ = server_url.get();
+        set_checking.set(true);
+        spawn_local(async move {
+            let result = health_check().await;
+            set_online.set(result);
+            set_checking.set(false);
+        });
+    });
 
     view! {
         <div class="header">
@@ -89,9 +110,15 @@ pub fn SettingsPage(set_page: WriteSignal<Page>) -> impl IntoView {
                 </div>
                 <div class="setting-row" style="margin-top:8px;">
                     <span class="setting-name">{t!(i18n, connection_label)}</span>
-                    <div class="status" id="status">
-                        <div class="status-dot" id="status-dot"></div>
-                        <span class="status-text" id="status-text">{t!(i18n, connection_checking)}</span>
+                    <div class="status">
+                        <div class="status-dot" class:error=move || !checking.get() && !online.get()></div>
+                        <span class="status-text" class:error=move || !checking.get() && !online.get()>
+                            {move || match (checking.get(), online.get()) {
+                                (true, _)      => t_string!(i18n, connection_checking),
+                                (false, true)  => t_string!(i18n, connection_online),
+                                (false, false) => t_string!(i18n, connection_error),
+                            }}
+                        </span>
                     </div>
                 </div>
             </div>

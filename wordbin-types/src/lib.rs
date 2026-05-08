@@ -11,6 +11,11 @@ pub struct CreateWord {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct WordCreatedId(pub i64);
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct WordCount {
+    pub count: i64,
+}
+
 #[derive(Debug, Serialize, Deserialize)]
 pub struct WordResponse {
     pub id: i64,

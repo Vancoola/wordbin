@@ -1,10 +1,16 @@
 use crate::Page;
+use crate::i18n::use_i18n;
 use icondata::LuArrowLeft;
 use leptos::prelude::*;
+use leptos_i18n::t;
 use leptos_icons::Icon;
+use wordbin_types::WordCount;
 
 #[component]
 pub fn WordsPage(set_page: WriteSignal<Page>) -> impl IntoView {
+    let i18n = use_i18n();
+    let word_count = expect_context::<RwSignal<WordCount>>();
+
     view! {
         <div class="header">
             <div class="header-left">
@@ -92,7 +98,7 @@ pub fn WordsPage(set_page: WriteSignal<Page>) -> impl IntoView {
         </div>
 
         <div class="footer">
-            <span class="count">7 words</span>
+            <span class="count">{move || word_count.get().count}" "{t!(i18n, words_saved)}</span>
         </div>
     }
 }
