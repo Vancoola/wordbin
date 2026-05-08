@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/wordmark.svg" width="320" alt="wordbin" />
+  <img src="docs/wordmark.png" width="320" alt="wordbin" />
 </p>
 
 # wordbin
