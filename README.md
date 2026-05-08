@@ -90,6 +90,7 @@ Swagger UI available at `http://localhost:3000/swagger-ui`.
 Use Makefile:
 
 ```bash
+cd wordbin-extension
 make build
 ```
 
