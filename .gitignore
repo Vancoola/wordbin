@@ -10,3 +10,5 @@
 /wordbin-extension/dist/
 /wordbin-extension/pkg/
 /wordbin-types/target/
+
+/words.db

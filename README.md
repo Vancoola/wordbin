@@ -82,12 +82,17 @@ Build context is the workspace root, not `server/` — the sibling `wordbin-type
 git clone https://github.com/Vancoola/wordbin
 cd wordbin
 docker build -f server/Dockerfile -t wordbin-server .
+
+# Pre-create the SQLite file — without this, Docker creates a directory at the
+# bind path and SQLite fails with "unable to open database file".
+touch words.db
+
 docker run --rm -p 3000:3000 \
   -v "$PWD/words.db:/app/server/words.db" \
   wordbin-server
 ```
 
-`words.db` is created in the current directory on first run and survives container restarts.
+`words.db` lives in the current directory and survives container restarts.
 
 ### Config
 
