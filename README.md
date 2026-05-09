@@ -66,13 +66,32 @@ Wordbin is a self-hosted daemon that gives me a single endpoint to send words fr
 
 ## Running the server
 
+### From source
+
 ```bash
 git clone https://github.com/Vancoola/wordbin
 cd wordbin/server
 cargo run
 ```
 
-Config is read from `App.toml` in the project root:
+### Docker
+
+Build context is the workspace root, not `server/` — the sibling `wordbin-types` crate is needed:
+
+```bash
+git clone https://github.com/Vancoola/wordbin
+cd wordbin
+docker build -f server/Dockerfile -t wordbin-server .
+docker run --rm -p 3000:3000 \
+  -v "$PWD/words.db:/app/server/words.db" \
+  wordbin-server
+```
+
+`words.db` is created in the current directory on first run and survives container restarts.
+
+### Config
+
+Read from `server/App.toml` and **baked into the image at build time** — change the port or log level before `docker build`.
 
 ```toml
 [server]
@@ -81,7 +100,7 @@ host = "0.0.0.0"
 tracing_level = "INFO"
 ```
 
-Swagger UI available at `http://localhost:3000/swagger-ui`.
+Swagger UI: `http://localhost:3000/swagger-ui`.
 
 ---
 
@@ -119,7 +138,7 @@ Then load `wordbin-extension/dist/` into Chrome:
 - [ ] Auth — bearer token from config
 - [ ] Telegram client (bot)
 - [ ] CLI client
-- [ ] Docker image
+- [x] Docker image
 - [ ] Tauri client 
 
 ---
