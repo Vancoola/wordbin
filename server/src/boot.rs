@@ -13,10 +13,9 @@ use tower_http::cors::{AllowHeaders, AllowMethods, AllowOrigin, CorsLayer};
 use tracing::{info, trace};
 use utoipa::OpenApi;
 use utoipa_swagger_ui::SwaggerUi;
-use crate::model::auth::create_token;
+use crate::auth::create_token;
 
-pub(crate) async fn run_app(app_config: AppConfig) -> anyhow::Result<()> {
-    let pool = database().await?;
+pub(crate) async fn run_app(app_config: AppConfig, pool: SqlitePool) -> anyhow::Result<()> {
     let cors = cors_layer()?;
 
     let token = create_token(&app_config.security.jwt.secret)?;
@@ -38,7 +37,7 @@ pub(crate) async fn run_app(app_config: AppConfig) -> anyhow::Result<()> {
     Ok(())
 }
 
-async fn database() -> anyhow::Result<SqlitePool> {
+pub async fn database() -> anyhow::Result<SqlitePool> {
     let pool = SqlitePool::connect_with(
         SqliteConnectOptions::from_str("sqlite://words.db")?.create_if_missing(true),
     )

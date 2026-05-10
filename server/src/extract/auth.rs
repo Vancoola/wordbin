@@ -1,7 +1,7 @@
 use axum::extract::FromRequestParts;
 use axum::http::request::Parts;
 use axum::http::StatusCode;
-use crate::model::auth::verify_token;
+use crate::auth::verify_token;
 use crate::state::AppState;
 
 pub struct Authenticated;
