@@ -2,7 +2,8 @@ use crate::handler::__path_health_check;
 use crate::handler::word::__path_active_word_handler;
 use crate::handler::word::__path_add_word_handler;
 use crate::handler::word::__path_word_count_handler;
-use utoipa::OpenApi;
+use utoipa::openapi::security::{HttpAuthScheme, HttpBuilder, SecurityScheme};
+use utoipa::{Modify, OpenApi};
 use wordbin_types::CreateWord;
 
 #[derive(OpenApi)]
@@ -31,5 +32,22 @@ use wordbin_types::CreateWord;
             url="https://www.apache.org/licenses/",
         ),
     ),
+    modifiers(&SecurityAddon)
 )]
 pub struct ApiDoc;
+struct SecurityAddon;
+
+impl Modify for SecurityAddon {
+    fn modify(&self, openapi: &mut utoipa::openapi::OpenApi) {
+        let components = openapi.components.get_or_insert_with(Default::default);
+        components.add_security_scheme(
+            "api_jwt_token",
+            SecurityScheme::Http(
+                HttpBuilder::new()
+                    .scheme(HttpAuthScheme::Bearer)
+                    .bearer_format("JWT")
+                    .build(),
+            ),
+        );
+    }
+}

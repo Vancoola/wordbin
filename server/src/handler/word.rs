@@ -1,4 +1,5 @@
 use crate::error::AppError;
+use crate::extract::auth::Authenticated;
 use crate::repo::review::create_review;
 use crate::repo::word::{active_words, create_new_word, word_count};
 use crate::state::AppState;
@@ -8,8 +9,17 @@ use axum::{Json, debug_handler};
 use wordbin_types::{CreateWord, WordCount, WordCreatedId, WordResponse, WordsQuery};
 
 #[debug_handler]
-#[utoipa::path(context_path = "/word", post, path = "/add", tag = "word")]
+#[utoipa::path(
+    context_path = "/word",
+    post,
+    path = "/add",
+    tag = "word",
+    security(
+        ("api_jwt_token" = [])
+    )
+)]
 pub async fn add_word_handler(
+    _: Authenticated,
     State(app_state): State<AppState>,
     Json(payload): Json<CreateWord>,
 ) -> Result<(StatusCode, Json<WordCreatedId>), AppError> {
@@ -20,8 +30,17 @@ pub async fn add_word_handler(
 }
 
 #[debug_handler]
-#[utoipa::path(context_path = "/word", get, path = "/count", tag = "word")]
+#[utoipa::path(
+    context_path = "/word",
+    get,
+    path = "/count",
+    tag = "word",
+    security(
+        ("api_jwt_token" = [])
+    )
+)]
 pub async fn word_count_handler(
+    _: Authenticated,
     State(app_state): State<AppState>,
 ) -> Result<Json<WordCount>, AppError> {
     let count = word_count(&app_state.db).await?;
@@ -29,8 +48,17 @@ pub async fn word_count_handler(
 }
 
 #[debug_handler]
-#[utoipa::path(context_path = "/word", get, path = "/active", tag = "word")]
+#[utoipa::path(
+    context_path = "/word",
+    get,
+    path = "/active",
+    tag = "word",
+    security(
+        ("api_jwt_token" = [])
+    )
+)]
 pub async fn active_word_handler(
+    _: Authenticated,
     State(app_state): State<AppState>,
     Query(query): Query<WordsQuery>,
 ) -> Result<(StatusCode, Json<Vec<WordResponse>>), AppError> {

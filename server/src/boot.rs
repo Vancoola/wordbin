@@ -18,9 +18,6 @@ use utoipa_swagger_ui::SwaggerUi;
 pub(crate) async fn run_app(app_config: AppConfig, pool: SqlitePool) -> anyhow::Result<()> {
     let cors = cors_layer()?;
 
-    let token = create_token(&app_config.security.jwt.secret)?;
-    info!("API token: {}", token);
-
     let state = AppState {
         db: pool.clone(),
         app_config: app_config.clone(),

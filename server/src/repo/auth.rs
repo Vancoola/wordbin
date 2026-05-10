@@ -5,7 +5,7 @@ use crate::crypto::hash_token;
 use sqlx::SqlitePool;
 use time::{Duration, OffsetDateTime};
 
-pub async fn create_admin_token(
+pub async fn create_client_token(
     app_config: &AppConfig,
     pool: &SqlitePool,
     name: String,
