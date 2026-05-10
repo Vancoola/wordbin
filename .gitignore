@@ -12,3 +12,5 @@
 /wordbin-types/target/
 
 /words.db
+/wordbin-proto/target/
+/target/

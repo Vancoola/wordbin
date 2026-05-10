@@ -1,0 +1,20 @@
+[workspace.package]
+license = "Apache-2.0"
+authors = ["Dennis S. Dale <dennis.s.dale@icloud.com>"]
+
+[workspace]
+resolver = "2"
+members = ["server", "wordbin-extension", "wordbin-proto", "wordbin-types"]
+
+
+[workspace.lints.clippy]
+pedantic = { level = "warn", priority = -1 }
+perf = { level = "warn", priority = -1 }
+must_use_candidate = "allow"
+unwrap_used = "deny"
+panic = "deny"
+todo = "warn"
+unreachable = "warn"
+enum_glob_use = "deny"
+explicit_iter_loop = "warn"
+redundant_closure_for_method_calls = "warn"
