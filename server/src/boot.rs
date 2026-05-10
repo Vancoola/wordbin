@@ -10,15 +10,19 @@ use sqlx::{SqlitePool, migrate};
 use std::str::FromStr;
 use std::time::Duration;
 use tower_http::cors::{AllowHeaders, AllowMethods, AllowOrigin, CorsLayer};
-use tracing::trace;
+use tracing::{info, trace};
 use utoipa::OpenApi;
 use utoipa_swagger_ui::SwaggerUi;
+use crate::model::auth::create_token;
 
 pub(crate) async fn run_app(app_config: AppConfig) -> anyhow::Result<()> {
     let pool = database().await?;
     let cors = cors_layer()?;
 
-    let state = AppState { db: pool.clone() };
+    let token = create_token(&app_config.security.jwt.secret)?;
+    info!("API token: {}", token);
+
+    let state = AppState { db: pool.clone(), app_config: app_config.clone() };
 
     let app = Router::new()
         .route("/healthz", get(health_check))

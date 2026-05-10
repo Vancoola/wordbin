@@ -12,7 +12,8 @@ wordbin-types = { path = "../wordbin-types", features = ["utoipa"] }
 tokio = { version = "1.52", features = ["macros", "rt-multi-thread"] }
 
 async-trait = "0.1.89"
-figment = { version = "0.10.19", features = ["toml"] }
+dotenvy = "0.15"
+figment = { version = "0.10.19", features = ["toml", "env"] }
 
 anyhow = "1.0"
 
@@ -29,6 +30,8 @@ tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 axum = { version = "0.8", features = ["macros"] }
 tower = "0.5"
 tower-http = { version = "0.6", features = ["cors"] }
+
+jsonwebtoken = { version = "10.3", features = ["rust_crypto"] }
 
 utoipa = { version = "5.4.0", features = ["axum_extras"] }
 utoipa-swagger-ui = { version = "9.0.2", features = ["axum"] }

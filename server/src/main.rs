@@ -6,6 +6,7 @@ mod model;
 mod openapi;
 mod repo;
 mod state;
+mod extract;
 
 use crate::boot::run_app;
 use crate::config::{AppConfig, load_config};
@@ -14,6 +15,8 @@ use tracing::{Level, info};
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
+    dotenvy::dotenv().ok();
+
     let config = load_config();
 
     tracing_subscriber::fmt()
