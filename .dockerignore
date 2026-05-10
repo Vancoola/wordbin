@@ -1,0 +1,12 @@
+target/
+**/target/
+.git/
+.github/
+.idea/
+.vscode/
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+.env
+docs/

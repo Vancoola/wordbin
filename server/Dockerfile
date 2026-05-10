@@ -1,19 +1,26 @@
 FROM rust:1.90-slim-bookworm AS builder
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-        pkg-config ca-certificates curl \
+        pkg-config ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-COPY wordbin-types ./wordbin-types
-COPY server        ./server
 
-WORKDIR /app/server
+COPY Cargo.toml Cargo.lock ./
+
+
+COPY wordbin-types     ./wordbin-types
+COPY wordbin-proto     ./wordbin-proto
+COPY wordbin-extension ./wordbin-extension
+COPY server            ./server
+
+COPY .sqlx ./.sqlx
+ENV SQLX_OFFLINE=true
 
 RUN --mount=type=cache,target=/usr/local/cargo/registry \
-    --mount=type=cache,target=/app/server/target \
-    cargo build --release \
+    --mount=type=cache,target=/app/target \
+    cargo build --release -p server \
     && cp target/release/wordbin-server /usr/local/bin/wordbin-server
 
 FROM debian:bookworm-slim AS runtime
@@ -23,11 +30,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/* \
     && useradd --system --create-home --uid 10001 app
 
-
 WORKDIR /app/server
 
 COPY --from=builder /usr/local/bin/wordbin-server /usr/local/bin/wordbin-server
 COPY server/App.toml ./App.toml
+
+ENV DATABASE_URL=sqlite:/app/server/words.db
 
 RUN chown -R app:app /app/server
 

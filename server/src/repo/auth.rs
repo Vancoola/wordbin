@@ -12,27 +12,28 @@ pub async fn create_client_token(
     role_arg: RoleArg,
     ttl_days: Option<i64>,
 ) -> anyhow::Result<(i64, String)> {
-    let token = create_token(&app_config.security.jwt.secret)?;
+    let expires_at: Option<OffsetDateTime> =
+        ttl_days.map(|d| OffsetDateTime::now_utc() + Duration::days(d));
+
+    let token = create_token(&app_config.security.jwt.secret, expires_at.as_ref())?;
     let hash = hash_token(&token);
 
-    let expires_at = ttl_days
-        .map(|d| OffsetDateTime::now_utc() + Duration::days(d))
-        .unwrap_or(OffsetDateTime::now_utc() + Duration::days(1));
-
     let created_at = OffsetDateTime::now_utc();
+    let is_admin = matches!(role_arg, RoleArg::Admin);
 
-    let is_admin = match role_arg {
-        RoleArg::Admin => true,
-        RoleArg::User => false,
-    };
     let id = sqlx::query!(
-        "INSERT INTO tokens (name, token_hash, is_revoked, is_admin, created_at, expires_at) VALUES (?, ?, ?, ?, ?, ?)",
+        "INSERT INTO tokens (name, token_hash, is_revoked, is_admin, created_at, expires_at) \
+         VALUES (?, ?, ?, ?, ?, ?)",
         name,
         hash,
         false,
         is_admin,
         created_at,
         expires_at,
-    ).execute(pool).await?.last_insert_rowid();
+    )
+        .execute(pool)
+        .await?
+        .last_insert_rowid();
+
     Ok((id, token))
 }

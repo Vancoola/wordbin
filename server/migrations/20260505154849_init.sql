@@ -29,7 +29,7 @@ CREATE TABLE tokens
     is_revoked INTEGER  DEFAULT 0                 NOT NULL CHECK (is_revoked IN (0, 1)),
     is_admin   INTEGER  DEFAULT 0                 NOT NULL CHECK (is_admin IN (0, 1)),
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    expires_at DATETIME                           NOT NULL
+    expires_at DATETIME                           DEFAULT NULL
 );
 
 CREATE INDEX idx_tokens_hash_revoked ON tokens (token_hash, is_revoked);

@@ -1,4 +1,3 @@
-use crate::auth::create_token;
 use crate::config::AppConfig;
 use crate::handler::{health_check, word_router};
 use crate::openapi::ApiDoc;
@@ -11,7 +10,7 @@ use sqlx::{SqlitePool, migrate};
 use std::str::FromStr;
 use std::time::Duration;
 use tower_http::cors::{AllowHeaders, AllowMethods, AllowOrigin, CorsLayer};
-use tracing::{info, trace};
+use tracing::{trace};
 use utoipa::OpenApi;
 use utoipa_swagger_ui::SwaggerUi;
 
@@ -38,8 +37,10 @@ pub(crate) async fn run_app(app_config: AppConfig, pool: SqlitePool) -> anyhow::
 }
 
 pub async fn database() -> anyhow::Result<SqlitePool> {
+    let url = std::env::var("DATABASE_URL")
+        .unwrap_or_else(|_| "sqlite:words.db".into());
     let pool = SqlitePool::connect_with(
-        SqliteConnectOptions::from_str("sqlite://words.db")?.create_if_missing(true),
+        SqliteConnectOptions::from_str(&url)?.create_if_missing(true),
     )
     .await?;
 

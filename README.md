@@ -20,7 +20,7 @@ Wordbin is a self-hosted daemon that gives me a single endpoint to send words fr
 
 ## What it is
 
-- **wordbin-server** — Axum daemon, exposes a REST API, stores words in SQLite
+- **wordbin-server** — Axum daemon, exposes a REST API, stores words in SQLite; ships an admin CLI for token issuance
 - **wordbin-extension** — Browser extension (Leptos/WASM) to capture words while browsing
 - **wordbin-types** — Shared types between server and clients
 
@@ -35,12 +35,17 @@ Wordbin is a self-hosted daemon that gives me a single endpoint to send words fr
 ## Architecture
 
 ```
-┌───────────────┐    POST /word/add    ┌─────────────┐
-│   Extension   │ ───────────────────▶ │   Server    │ ──▶ SQLite
-│ (Leptos/WASM) │ ◀─── GET /active ─── │   (Axum)    │
-└───────────────┘                      └─────────────┘
-        ▲                                     ▲
-        └──── shared types: wordbin-types ────┘
+┌──────────────┐                           ┌──────────────┐
+│  admin CLI   │   token issue (offline)   │              │
+│ (server bin) │ ────────────────────────▶ │              │
+└──────────────┘                           │              │
+                                           │   Server     │
+┌──────────────┐  POST /word/add           │   (Axum)     │ ──▶ SQLite
+│  Extension   │  Authorization: Bearer    │              │
+│ (Leptos/WASM)│ ────────────────────────▶ │              │
+└──────────────┘                           └──────────────┘
+        ▲                                         ▲
+        └──── shared types: wordbin-types ────────┘
 ```
 
 ---
@@ -70,9 +75,27 @@ Wordbin is a self-hosted daemon that gives me a single endpoint to send words fr
 
 ```bash
 git clone https://github.com/Vancoola/wordbin
-cd wordbin/server
-cargo run
+cd wordbin
+
+# .env at workspace root
+echo 'DATABASE_URL=sqlite:words.db' > .env
+
+cargo run -p wordbin-server
 ```
+
+Run all `cargo` and `sqlx` commands from the workspace root — the `.env` is resolved relative to the current working directory.
+
+### Migrations
+
+Migrations live in `server/migrations/`. The runtime applies them on startup, so a fresh `cargo run` is enough for normal use. For ad-hoc operations a root-level `Makefile` wraps `sqlx-cli`:
+
+```bash
+make migrate                        # apply pending migrations
+make migrate-add name=add_tokens    # create a new migration
+make db-reset                       # wipe words.db and re-apply
+```
+
+`sqlx-cli` is a separate install: `cargo install sqlx-cli --no-default-features --features sqlite`.
 
 ### Docker
 
@@ -109,6 +132,34 @@ Swagger UI: `http://localhost:3000/swagger-ui`.
 
 ---
 
+## Authentication
+
+All `/word` endpoints require a JWT in the `Authorization: Bearer <token>` header. Tokens are issued by the server binary's admin subcommand and stored hashed in SQLite.
+
+Two roles:
+
+- **admin** — full access, intended for CLI / admin tools
+- **user** — data access only, intended for the browser extension and other clients
+
+### Issuing a token
+
+```bash
+# never expires
+cargo run -p wordbin-server -- token issue admin --name "my-laptop"
+
+# expires in 30 days
+cargo run -p wordbin-server -- token issue user --name "chrome-extension" --ttl-days 30
+```
+
+The plaintext token is printed once on stdout — save it, it's not recoverable later (only the hash is stored).
+
+In Docker:
+
+```bash
+docker run --rm -v "$PWD/words.db:/app/server/words.db" \
+  wordbin-server token issue user --name "chrome-extension"
+```
+
 ## Building the extension
 
 Use Makefile:
@@ -140,7 +191,8 @@ Then load `wordbin-extension/dist/` into Chrome:
 - [x] Settings page with i18n
 - [ ] Words list view
 - [ ] Spaced-repetition review flow (table already in schema)
-- [ ] Auth — bearer token from config
+- [x] Auth — JWT (admin / user roles)
+- [x] Admin CLI — token issuance
 - [ ] Telegram client (bot)
 - [ ] CLI client
 - [x] Docker image

@@ -15,3 +15,5 @@
 /wordbin-proto/target/
 /target/
 /.env
+/words.db-shm
+/words.db-wal
