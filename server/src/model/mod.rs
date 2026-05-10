@@ -1,2 +1,2 @@
-pub mod word;
 pub mod auth;
+pub mod word;

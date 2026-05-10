@@ -1,3 +1,4 @@
+use crate::auth::create_token;
 use crate::config::AppConfig;
 use crate::handler::{health_check, word_router};
 use crate::openapi::ApiDoc;
@@ -13,7 +14,6 @@ use tower_http::cors::{AllowHeaders, AllowMethods, AllowOrigin, CorsLayer};
 use tracing::{info, trace};
 use utoipa::OpenApi;
 use utoipa_swagger_ui::SwaggerUi;
-use crate::auth::create_token;
 
 pub(crate) async fn run_app(app_config: AppConfig, pool: SqlitePool) -> anyhow::Result<()> {
     let cors = cors_layer()?;
@@ -21,7 +21,10 @@ pub(crate) async fn run_app(app_config: AppConfig, pool: SqlitePool) -> anyhow::
     let token = create_token(&app_config.security.jwt.secret)?;
     info!("API token: {}", token);
 
-    let state = AppState { db: pool.clone(), app_config: app_config.clone() };
+    let state = AppState {
+        db: pool.clone(),
+        app_config: app_config.clone(),
+    };
 
     let app = Router::new()
         .route("/healthz", get(health_check))

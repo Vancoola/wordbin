@@ -1,8 +1,8 @@
-use sqlx::SqlitePool;
 use crate::config::AppConfig;
+use sqlx::SqlitePool;
 
 #[derive(Clone)]
 pub struct AppState {
     pub db: SqlitePool,
-    pub app_config: AppConfig
+    pub app_config: AppConfig,
 }

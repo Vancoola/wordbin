@@ -32,5 +32,7 @@ pub enum TokenCmd {
 }
 
 #[derive(Copy, Clone, ValueEnum)]
-pub enum RoleArg { Admin, User }
-
+pub enum RoleArg {
+    Admin,
+    User,
+}

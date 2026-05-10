@@ -17,7 +17,7 @@ pub struct JwtConfig {
 
 #[derive(Deserialize, Clone, Debug)]
 pub struct Secure {
-    pub jwt: JwtConfig
+    pub jwt: JwtConfig,
 }
 
 #[derive(Deserialize, Clone, Debug)]

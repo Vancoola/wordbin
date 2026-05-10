@@ -1,9 +1,8 @@
-use jsonwebtoken::{decode, encode, Algorithm, DecodingKey, EncodingKey, Header, Validation};
-use time::{Duration, OffsetDateTime};
 use crate::model::auth::Claims;
+use jsonwebtoken::{Algorithm, DecodingKey, EncodingKey, Header, Validation, decode, encode};
+use time::{Duration, OffsetDateTime};
 
 pub fn create_token(secret: &str) -> anyhow::Result<String> {
-
     let exp = (OffsetDateTime::now_utc() + Duration::days(90)).unix_timestamp();
     let claims = Claims { exp };
 

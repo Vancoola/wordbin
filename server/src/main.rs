@@ -2,6 +2,7 @@ mod auth;
 mod boot;
 mod cli;
 mod config;
+mod crypto;
 mod error;
 mod extract;
 mod handler;
@@ -9,7 +10,6 @@ mod model;
 mod openapi;
 mod repo;
 mod state;
-mod crypto;
 
 use crate::boot::{database, run_app};
 use crate::cli::{Cli, Command, TokenCmd};
@@ -37,7 +37,8 @@ async fn main() -> anyhow::Result<()> {
                 name,
                 ttl_days,
             } => {
-                let (id, token) = repo::auth::create_admin_token(&config, &pool, name, role, ttl_days).await?;
+                let (id, token) =
+                    repo::auth::create_admin_token(&config, &pool, name, role, ttl_days).await?;
                 println!(
                     "New admin token (id={}). Save it — it won't be shown again:",
                     id
