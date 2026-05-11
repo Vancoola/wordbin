@@ -189,7 +189,7 @@ Then load `wordbin-extension/dist/` into Chrome:
 
 - [x] Capture endpoint + extension popup
 - [x] Settings page with i18n
-- [ ] Words list view
+- [x] Words list view
 - [ ] Spaced-repetition review flow (table already in schema)
 - [x] Auth — JWT (admin / user roles)
 - [x] Admin CLI — token issuance
