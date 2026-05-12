@@ -1,11 +1,14 @@
-use crate::model::auth::Claims;
+use crate::model::auth::{Claims, Role};
 use jsonwebtoken::{Algorithm, DecodingKey, EncodingKey, Header, Validation, decode, encode};
 use time::{OffsetDateTime};
 use uuid::Uuid;
 
-pub fn create_token(secret: &str, exp: Option<&OffsetDateTime>) -> anyhow::Result<String> {
+
+
+pub fn create_token(secret: &str, role: Role, exp: Option<&OffsetDateTime>) -> anyhow::Result<String> {
     let claims = Claims {
         jti: Uuid::new_v4().to_string(),
+        role,
         exp: exp.map(|t| t.unix_timestamp()),
     };
 

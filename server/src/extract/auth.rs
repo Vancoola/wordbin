@@ -3,8 +3,11 @@ use crate::state::AppState;
 use axum::extract::FromRequestParts;
 use axum::http::StatusCode;
 use axum::http::request::Parts;
+use crate::model::auth::Role;
 
-pub struct Authenticated;
+pub struct Authenticated {
+    pub role: Role,
+}
 
 impl FromRequestParts<AppState> for Authenticated {
     type Rejection = (StatusCode, &'static str);
@@ -20,8 +23,8 @@ impl FromRequestParts<AppState> for Authenticated {
             .and_then(|v| v.strip_prefix("Bearer "))
             .ok_or((StatusCode::UNAUTHORIZED, "Missing Authorization header"))?;
 
-        verify_token(token, state.app_config.security.jwt.secret.as_ref())
+        let claims = verify_token(token, state.app_config.security.jwt.secret.as_ref())
             .map_err(|_| (StatusCode::UNAUTHORIZED, "Invalid token"))?;
-        Ok(Authenticated {})
+        Ok(Authenticated { role: claims.role })
     }
 }

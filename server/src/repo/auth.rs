@@ -4,6 +4,7 @@ use crate::config::AppConfig;
 use crate::crypto::hash_token;
 use sqlx::SqlitePool;
 use time::{Duration, OffsetDateTime};
+use crate::model::auth::Role;
 
 pub async fn create_client_token(
     app_config: &AppConfig,
@@ -15,7 +16,8 @@ pub async fn create_client_token(
     let expires_at: Option<OffsetDateTime> =
         ttl_days.map(|d| OffsetDateTime::now_utc() + Duration::days(d));
 
-    let token = create_token(&app_config.security.jwt.secret, expires_at.as_ref())?;
+    let role: Role = role_arg.into();
+    let token = create_token(&app_config.security.jwt.secret, role, expires_at.as_ref())?;
     let hash = hash_token(&token);
 
     let created_at = OffsetDateTime::now_utc();
