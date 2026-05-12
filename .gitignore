@@ -1,19 +1,16 @@
-/server/target/
-/server/.idea/
+# IDE
+.idea/
+*.iml
 
-/.idea
-/server/words.db
-/server/words.db-shm
-/server/words.db-wal
-/server/.env
-/wordbin-extension/target/
-/wordbin-extension/dist/
-/wordbin-extension/pkg/
-/wordbin-types/target/
+# Build output
+target/
+dist/
+pkg/
 
-/words.db
-/wordbin-proto/target/
-/target/
-/.env
-/words.db-shm
-/words.db-wal
+# Database
+*.db
+*.db-shm
+*.db-wal
+
+# Environment
+.env
