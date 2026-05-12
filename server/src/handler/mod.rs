@@ -4,6 +4,7 @@ use axum::Router;
 use axum::routing::{get, post};
 
 pub mod word;
+mod auth;
 
 pub fn word_router() -> Router<AppState> {
     Router::new()

@@ -32,5 +32,9 @@
   "version": "wordbin v0.1.0",
   "interface_section": "INTERFACE",
   "server_section": "SERVEUR",
-  "defaults_section": "DÉFAUT"
+  "defaults_section": "DÉFAUT",
+  "auth_section": "AUTHENTIFICATION",
+  "api_token_label": "jeton API",
+  "api_token_placeholder": "collez le JWT ici",
+  "api_token_hint": "générer sur le serveur : cargo run -- token issue --role user"
 }

@@ -29,12 +29,15 @@ pub fn SettingsPage(set_page: WriteSignal<Page>) -> impl IntoView {
     let (auto_detect, set_auto_detect) = signal(initial.auto_detect_source);
     let (close_after_save, set_close_after_save) = signal(initial.close_after_save);
 
+    let (api_token, set_api_token) = signal(initial.api_token);
+
     let on_save = move || {
         let updated = Settings {
             language: language.get(),
             server_url: server_url.get(),
             auto_detect_source: auto_detect.get(),
             close_after_save: close_after_save.get(),
+            api_token: api_token.get(),
         };
         settings::save(&updated);
         settings_ctx.set(updated);
@@ -108,6 +111,19 @@ pub fn SettingsPage(set_page: WriteSignal<Page>) -> impl IntoView {
                             prop:value=server_url
                             on:input=move |e| set_server_url.set(event_target_value(&e))
                             placeholder="http://localhost:3000" />
+                    </div>
+                </div>
+                <div class="section">
+                <div class="section-label">{t!(i18n, auth_section)}</div>
+                    <div class="setting-row full-row">
+                        <span class="setting-name">{t!(i18n, api_token_label)}</span>
+                        <div class="input-wrap">
+                            <input type="password" id="api-token"
+                                prop:value=api_token
+                                on:input=move |e| set_api_token.set(event_target_value(&e))
+                                placeholder=move || t_string!(i18n, api_token_placeholder) />
+                        </div>
+                        <span class="setting-hint">{t!(i18n, api_token_hint)}</span>
                     </div>
                 </div>
                 <div class="setting-row" style="margin-top:8px;">

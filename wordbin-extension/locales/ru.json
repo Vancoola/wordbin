@@ -32,5 +32,9 @@
   "version": "wordbin v0.1.0",
   "interface_section": "ИНТЕРФЕЙС",
   "server_section": "СЕРВЕР",
-  "defaults_section": "ПО УМОЛЧАНИЮ"
+  "defaults_section": "ПО УМОЛЧАНИЮ",
+  "auth_section": "АВТОРИЗАЦИЯ",
+  "api_token_label": "api-токен",
+  "api_token_placeholder": "вставьте JWT",
+  "api_token_hint": "сгенерировать на сервере: cargo run -- token issue --role user"
 }

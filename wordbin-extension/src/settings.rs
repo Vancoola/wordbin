@@ -10,6 +10,8 @@ pub struct Settings {
     pub server_url: String,
     pub auto_detect_source: bool,
     pub close_after_save: bool,
+
+    pub api_token: String,
 }
 impl Default for Settings {
     fn default() -> Self {
@@ -18,12 +20,16 @@ impl Default for Settings {
             server_url: "http://localhost:3000".to_string(),
             auto_detect_source: true,
             close_after_save: false,
+            api_token: String::new(),
         }
     }
 }
 
 pub fn base_url() -> String {
     load().server_url
+}
+pub fn api_token() -> String {
+    load().api_token
 }
 
 pub fn load() -> Settings {

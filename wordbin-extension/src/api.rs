@@ -1,16 +1,24 @@
-use crate::settings::base_url;
-use reqwest::Client;
+use crate::settings::{api_token, base_url};
+use reqwest::{Client, RequestBuilder};
 use std::sync::OnceLock;
-use wordbin_types::{CreateWord, WordCount, WordCreatedId, WordResponse};
+use wordbin_types::word::{CreateWord, WordCount, WordCreatedId, WordResponse};
 
 static CLIENT: OnceLock<Client> = OnceLock::new();
+
+fn authed(req: RequestBuilder) -> RequestBuilder {
+    let token = api_token();
+    if token.is_empty() {
+        req
+    } else {
+        req.bearer_auth(token)
+    }
+}
 
 fn client() -> &'static Client {
     CLIENT.get_or_init(Client::new)
 }
 pub async fn add_word(payload: CreateWord) -> anyhow::Result<WordCreatedId> {
-    let res = client()
-        .post(format!("{}/word/add", base_url()))
+    let res = authed(client().post(format!("{}/word/add", base_url())))
         .json(&payload)
         .send()
         .await?
@@ -21,8 +29,7 @@ pub async fn add_word(payload: CreateWord) -> anyhow::Result<WordCreatedId> {
 }
 
 pub async fn word_count() -> anyhow::Result<i64> {
-    let res = client()
-        .get(format!("{}/word/count", base_url()))
+    let res = authed(client().get(format!("{}/word/count", base_url())))
         .send()
         .await?
         .json::<WordCount>()
@@ -45,8 +52,7 @@ pub async fn fetch_words(
     offset: i64,
     status: Option<String>,
 ) -> anyhow::Result<Vec<WordResponse>> {
-    let mut req = client()
-        .get(format!("{}/word/active", base_url()))
+    let mut req = authed(client().get(format!("{}/word/active", base_url())))
         .query(&[("limit", limit.to_string()), ("offset", offset.to_string())]);
 
     if let Some(s) = status {

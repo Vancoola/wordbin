@@ -32,5 +32,9 @@
   "version": "wordbin v0.1.0",
   "interface_section": "INTERFACE",
   "server_section": "SERVER",
-  "defaults_section": "DEFAULTS"
+  "defaults_section": "DEFAULTS",
+  "auth_section": "AUTHENTICATION",
+  "api_token_label": "api token",
+  "api_token_placeholder": "paste JWT here",
+  "api_token_hint": "generate on server: cargo run -- token issue --role user"
 }

@@ -2,7 +2,7 @@ use crate::model::word::Word;
 use crate::model::word::object::WordId;
 use sqlx::SqlitePool;
 use time::OffsetDateTime;
-use wordbin_types::CreateWord;
+use wordbin_types::word::CreateWord;
 
 pub async fn create_new_word(word: CreateWord, pool: &SqlitePool) -> anyhow::Result<WordId> {
     let added = OffsetDateTime::now_utc();

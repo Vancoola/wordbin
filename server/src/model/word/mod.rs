@@ -4,7 +4,7 @@ use crate::model::word::object::{Status, WordId};
 use serde::Serialize;
 use time::OffsetDateTime;
 use time::format_description::well_known::Rfc3339;
-use wordbin_types::WordResponse;
+use wordbin_types::word::WordResponse;
 
 #[derive(Debug, Serialize, sqlx::FromRow)]
 pub struct Word {

@@ -32,5 +32,9 @@
   "version": "wordbin v0.1.0",
   "interface_section": "OBERFLÄCHE",
   "server_section": "SERVER",
-  "defaults_section": "STANDARD"
+  "defaults_section": "STANDARD",
+  "auth_section": "AUTHENTIFIZIERUNG",
+  "api_token_label": "API-Token",
+  "api_token_placeholder": "JWT hier einfügen",
+  "api_token_hint": "auf dem Server erzeugen: cargo run -- token issue --role user"
 }

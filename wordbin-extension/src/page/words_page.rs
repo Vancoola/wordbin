@@ -6,7 +6,7 @@ use leptos::prelude::*;
 use leptos::task::spawn_local;
 use leptos_i18n::t;
 use leptos_icons::Icon;
-use wordbin_types::{WordCount, WordResponse};
+use wordbin_types::word::{WordCount, WordResponse};
 
 #[derive(Clone, PartialEq)]
 enum WordFilter {

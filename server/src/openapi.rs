@@ -4,7 +4,7 @@ use crate::handler::word::__path_add_word_handler;
 use crate::handler::word::__path_word_count_handler;
 use utoipa::openapi::security::{HttpAuthScheme, HttpBuilder, SecurityScheme};
 use utoipa::{Modify, OpenApi};
-use wordbin_types::CreateWord;
+use wordbin_types::word::CreateWord;
 
 #[derive(OpenApi)]
 #[openapi(
@@ -21,6 +21,7 @@ use wordbin_types::CreateWord;
     ),
     tags (
         (name="word", description=""),
+        (name="auth", description=""),
         (name="status", description="")
     ),
     info(

@@ -10,7 +10,7 @@ use crate::settings::Settings;
 use leptos::prelude::*;
 use leptos::task::spawn_local;
 use wasm_bindgen::prelude::*;
-use wordbin_types::WordCount;
+use wordbin_types::word::WordCount;
 
 include!(concat!(env!("OUT_DIR"), "/i18n/mod.rs"));
 

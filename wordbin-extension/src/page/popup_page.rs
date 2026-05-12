@@ -9,7 +9,7 @@ use leptos_i18n::{t, t_string};
 use leptos_icons::Icon;
 use wasm_bindgen::JsValue;
 use wasm_bindgen::prelude::wasm_bindgen;
-use wordbin_types::{CreateWord, WordCount};
+use wordbin_types::word::{CreateWord, WordCount};
 
 #[derive(Clone, PartialEq)]
 enum ToastState {

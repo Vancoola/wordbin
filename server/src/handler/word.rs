@@ -6,7 +6,7 @@ use crate::state::AppState;
 use axum::extract::{Query, State};
 use axum::http::StatusCode;
 use axum::{Json, debug_handler};
-use wordbin_types::{CreateWord, WordCount, WordCreatedId, WordResponse, WordsQuery};
+use wordbin_types::word::{CreateWord, WordCount, WordCreatedId, WordResponse, WordsQuery};
 
 #[debug_handler]
 #[utoipa::path(
