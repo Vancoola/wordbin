@@ -1,5 +1,5 @@
-use serde::{Deserialize, Serialize};
 use crate::cli::RoleArg;
+use serde::{Deserialize, Serialize};
 
 #[derive(Copy, Clone, Serialize, Deserialize, PartialEq, Eq, Debug)]
 #[serde(rename_all = "lowercase")]

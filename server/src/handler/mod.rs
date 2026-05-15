@@ -3,8 +3,8 @@ use crate::state::AppState;
 use axum::Router;
 use axum::routing::{get, post};
 
-pub mod word;
 mod auth;
+pub mod word;
 
 pub fn word_router() -> Router<AppState> {
     Router::new()

@@ -2,9 +2,9 @@ use crate::auth::create_token;
 use crate::cli::RoleArg;
 use crate::config::AppConfig;
 use crate::crypto::hash_token;
+use crate::model::auth::Role;
 use sqlx::SqlitePool;
 use time::{Duration, OffsetDateTime};
-use crate::model::auth::Role;
 
 pub async fn create_client_token(
     app_config: &AppConfig,
@@ -33,9 +33,9 @@ pub async fn create_client_token(
         created_at,
         expires_at,
     )
-        .execute(pool)
-        .await?
-        .last_insert_rowid();
+    .execute(pool)
+    .await?
+    .last_insert_rowid();
 
     Ok((id, token))
 }

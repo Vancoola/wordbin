@@ -1,9 +1,9 @@
 use crate::auth::verify_token;
+use crate::model::auth::Role;
 use crate::state::AppState;
 use axum::extract::FromRequestParts;
 use axum::http::StatusCode;
 use axum::http::request::Parts;
-use crate::model::auth::Role;
 
 #[allow(dead_code)]
 pub struct Authenticated {

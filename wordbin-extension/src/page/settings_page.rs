@@ -1,5 +1,5 @@
 use crate::api::health_check;
-use crate::i18n::{t, t_string, use_i18n, I18nLocaleTrait, Locale};
+use crate::i18n::{I18nLocaleTrait, Locale, t, t_string, use_i18n};
 use crate::settings::Settings;
 use crate::{Page, settings};
 use icondata::{LuArrowLeft, LuGlobe, LuSave};

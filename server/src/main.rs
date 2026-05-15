@@ -39,9 +39,7 @@ async fn main() -> anyhow::Result<()> {
             } => {
                 let (id, token) =
                     repo::auth::create_client_token(&config, &pool, name, role, ttl_days).await?;
-                println!(
-                    "New admin token (id={id}). Save it — it won't be shown again:"
-                );
+                println!("New admin token (id={id}). Save it — it won't be shown again:");
                 println!("{token}");
                 Ok(())
             }

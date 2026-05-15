@@ -2,7 +2,7 @@
     clippy::match_same_arms,
     clippy::ignored_unit_patterns,
     clippy::used_underscore_binding,
-    clippy::default_trait_access,
+    clippy::default_trait_access
 )]
 
 mod api;
