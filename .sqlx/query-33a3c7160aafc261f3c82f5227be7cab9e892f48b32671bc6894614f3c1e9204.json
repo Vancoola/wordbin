@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "INSERT INTO words (value, source, notes, status, added_at) VALUES (?, ?, ?, ?, ?)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 5
+    },
+    "nullable": []
+  },
+  "hash": "33a3c7160aafc261f3c82f5227be7cab9e892f48b32671bc6894614f3c1e9204"
+}

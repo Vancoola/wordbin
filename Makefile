@@ -11,3 +11,6 @@ db-reset:
 	rm -f words.db
 	sqlx database create
 	$(MAKE) migrate
+
+sqlx-prepare:
+	cargo sqlx prepare --workspace
