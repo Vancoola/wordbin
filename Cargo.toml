@@ -4,7 +4,7 @@ authors = ["Dennis S. Dale <dennis.s.dale@icloud.com>"]
 
 [workspace]
 resolver = "2"
-members = ["server", "wordbin-extension", "wordbin-proto", "wordbin-types"]
+members = ["server", "wordbin-extension", "wordbin-types"]
 
 
 [workspace.lints.clippy]
