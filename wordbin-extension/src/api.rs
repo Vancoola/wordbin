@@ -44,7 +44,7 @@ pub async fn health_check() -> bool {
         .send()
         .await
         .map(|r| r.status().is_success())
-        .unwrap_or(false)
+        .is_ok_and(|r| r)
 }
 
 pub async fn fetch_words(

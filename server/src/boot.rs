@@ -70,6 +70,6 @@ fn cors_layer() -> anyhow::Result<CorsLayer> {
             "access-control-allow-origin".parse()?,
         ]))
         .allow_credentials(true)
-        .max_age(Duration::from_secs(3600));
+        .max_age(Duration::from_hours(1));
     Ok(cors)
 }

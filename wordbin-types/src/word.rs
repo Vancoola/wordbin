@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 #[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
 #[derive(Debug, Serialize, Deserialize)]
 pub struct CreateWord {
-    pub word: String,
+    pub value: String,
     pub source: String,
     pub notes: String,
 }

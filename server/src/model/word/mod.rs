@@ -9,7 +9,7 @@ use wordbin_types::word::WordResponse;
 #[derive(Debug, Serialize, sqlx::FromRow)]
 pub struct Word {
     pub id: WordId,
-    pub word: String,
+    pub value: String,
     pub source: String,
     #[serde(with = "time::serde::rfc3339")]
     pub added_at: OffsetDateTime,
@@ -21,7 +21,7 @@ impl From<Word> for WordResponse {
     fn from(value: Word) -> Self {
         Self {
             id: value.id.0,
-            word: value.word,
+            word: value.value,
             source: value.source,
             status: value.status.to_string(),
             added_at: value.added_at.format(&Rfc3339).unwrap_or_default(),

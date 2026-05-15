@@ -5,6 +5,7 @@ use axum::http::StatusCode;
 use axum::http::request::Parts;
 use crate::model::auth::Role;
 
+#[allow(dead_code)]
 pub struct Authenticated {
     pub role: Role,
 }

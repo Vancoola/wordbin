@@ -3,7 +3,7 @@ use std::error::Error;
 use std::path::PathBuf;
 
 fn main() -> Result<(), Box<dyn Error>> {
-    let i18n_mod_directory = PathBuf::from(std::env::var_os("OUT_DIR").unwrap()).join("i18n");
+    let i18n_mod_directory = PathBuf::from(std::env::var_os("OUT_DIR").expect("")).join("i18n");
 
     let cfg = Config::new("en")?
         .add_locale("ru")?

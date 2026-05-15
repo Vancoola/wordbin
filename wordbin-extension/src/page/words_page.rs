@@ -8,6 +8,9 @@ use leptos_i18n::t;
 use leptos_icons::Icon;
 use wordbin_types::word::{WordCount, WordResponse};
 
+const LIMIT: i64 = 20;
+const LIMIT_USIZE: usize = 20;
+
 #[derive(Clone, PartialEq)]
 enum WordFilter {
     All,
@@ -16,13 +19,12 @@ enum WordFilter {
     Known,
 }
 
+#[allow(clippy::too_many_lines)]
 #[component]
 pub fn WordsPage(set_page: WriteSignal<Page>) -> impl IntoView {
     let i18n = use_i18n();
     let word_count = expect_context::<RwSignal<WordCount>>();
     let (filter, set_filter) = signal(WordFilter::All);
-
-    const LIMIT: i64 = 20;
 
     let (words, set_words) = signal(Vec::<WordResponse>::new());
     let (offset, set_offset) = signal(0i64);
@@ -47,7 +49,7 @@ pub fn WordsPage(set_page: WriteSignal<Page>) -> impl IntoView {
             match fetch_words(LIMIT, current_offset, status).await {
                 Ok(new_words) => {
                     leptos::logging::log!("fetched: {}", new_words.len());
-                    if (new_words.len() as i64) < LIMIT {
+                    if (new_words.len()) < LIMIT_USIZE {
                         set_has_more.set(false);
                     }
                     set_offset.update(|o| *o += LIMIT);

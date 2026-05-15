@@ -53,7 +53,7 @@ pub fn PopupPage(set_page: WriteSignal<Page>) -> impl IntoView {
         set_toast.set(ToastState::Hidden);
 
         let payload = CreateWord {
-            word: word_val,
+            value: word_val,
             source: source.get(),
             notes: notes.get(),
         };

@@ -8,8 +8,8 @@ pub async fn create_new_word(word: CreateWord, pool: &SqlitePool) -> anyhow::Res
     let added = OffsetDateTime::now_utc();
 
     let word_id = sqlx::query!(
-        "INSERT INTO words (word, source, notes, status, added_at) VALUES (?, ?, ?, ?, ?)",
-        word.word,
+        "INSERT INTO words (value, source, notes, status, added_at) VALUES (?, ?, ?, ?, ?)",
+        word.value,
         word.source,
         word.notes,
         "new",
@@ -39,7 +39,7 @@ pub async fn active_words(
         Some(s) => {
             sqlx::query_as!(
                 Word,
-                "SELECT id, word, source, status, added_at, notes
+                "SELECT id, value, source, status, added_at, notes
              FROM words WHERE status = ?
              ORDER BY added_at DESC LIMIT ? OFFSET ?",
                 s,
@@ -52,7 +52,7 @@ pub async fn active_words(
         None => {
             sqlx::query_as!(
                 Word,
-                "SELECT id, word, source, status, added_at, notes
+                "SELECT id, value, source, status, added_at, notes
              FROM words
              ORDER BY added_at DESC LIMIT ? OFFSET ?",
                 limit,

@@ -1,5 +1,5 @@
 use crate::api::health_check;
-use crate::i18n::*;
+use crate::i18n::{t, t_string, use_i18n, I18nLocaleTrait, Locale};
 use crate::settings::Settings;
 use crate::{Page, settings};
 use icondata::{LuArrowLeft, LuGlobe, LuSave};
@@ -8,6 +8,7 @@ use leptos::task::spawn_local;
 use leptos_icons::Icon;
 use std::str::FromStr;
 
+#[allow(clippy::too_many_lines)]
 #[component]
 pub fn SettingsPage(set_page: WriteSignal<Page>) -> impl IntoView {
     let i18n = use_i18n();

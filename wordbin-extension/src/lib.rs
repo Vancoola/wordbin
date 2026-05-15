@@ -1,3 +1,10 @@
+#![allow(
+    clippy::match_same_arms,
+    clippy::ignored_unit_patterns,
+    clippy::used_underscore_binding,
+    clippy::default_trait_access,
+)]
+
 mod api;
 mod page;
 mod settings;
@@ -57,8 +64,6 @@ fn LocaleSync() -> impl IntoView {
     Effect::new(move |_| {
         i18n.set_locale(settings.get().language);
     });
-
-    view! {}
 }
 
 #[component]
@@ -70,8 +75,6 @@ fn WordCountSync() -> impl IntoView {
             word_count.set(WordCount { count: wc });
         }
     });
-
-    view! {}
 }
 
 #[wasm_bindgen(start)]
