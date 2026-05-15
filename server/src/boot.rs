@@ -51,7 +51,7 @@ pub async fn database() -> anyhow::Result<SqlitePool> {
 
 fn cors_layer() -> anyhow::Result<CorsLayer> {
     let cors = CorsLayer::new()
-        .allow_origin(AllowOrigin::list(["http://localhost:8080".parse()?]))
+        .allow_origin(AllowOrigin::any())
         .allow_methods(AllowMethods::list([
             Method::GET,
             Method::POST,
@@ -64,10 +64,7 @@ fn cors_layer() -> anyhow::Result<CorsLayer> {
             "content-type".parse()?,
             "authorization".parse()?,
             "accept".parse()?,
-            "x-requested-with".parse()?,
-            "access-control-allow-origin".parse()?,
         ]))
-        .allow_credentials(true)
         .max_age(Duration::from_hours(1));
     Ok(cors)
 }

@@ -1,5 +1,7 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
+html { background: #0e0e0e; }
+
 body {
     width: 360px;
     background: #0e0e0e;
@@ -7,6 +9,15 @@ body {
     font-family: 'JetBrains Mono', 'Fira Code', monospace;
     font-size: 13px;
     overflow: hidden;
+}
+
+/* Standalone window mode (chrome.windows.create), e.g. Settings.
+   Centers the 360px content column inside the larger window and lets
+   it grow to fill vertical space. */
+body.mode-window {
+    margin: 0 auto;
+    min-height: 100vh;
+    overflow-y: auto;
 }
 
 .header {

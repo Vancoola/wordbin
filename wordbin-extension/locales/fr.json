@@ -28,6 +28,8 @@
   "close_after_save_hint": "fermer le popup après ajout",
   "save_settings": "enregistrer",
   "settings_saved": "paramètres enregistrés",
+  "settings_denied": "permission refusée",
+  "settings_error": "échec de l'enregistrement",
   "back": "Retour",
   "version": "wordbin v0.1.0",
   "interface_section": "INTERFACE",

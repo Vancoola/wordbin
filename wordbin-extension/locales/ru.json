@@ -28,6 +28,8 @@
   "close_after_save_hint": "закрыть попап после добавления слова",
   "save_settings": "сохранить",
   "settings_saved": "настройки сохранены",
+  "settings_denied": "доступ не разрешён",
+  "settings_error": "ошибка сохранения",
   "back": "Назад",
   "version": "wordbin v0.1.0",
   "interface_section": "ИНТЕРФЕЙС",

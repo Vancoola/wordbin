@@ -28,6 +28,8 @@
   "close_after_save_hint": "Popup nach dem Hinzufügen schließen",
   "save_settings": "Einstellungen speichern",
   "settings_saved": "Einstellungen gespeichert",
+  "settings_denied": "Zugriff verweigert",
+  "settings_error": "Speichern fehlgeschlagen",
   "back": "Zurück",
   "version": "wordbin v0.1.0",
   "interface_section": "OBERFLÄCHE",

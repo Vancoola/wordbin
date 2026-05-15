@@ -28,6 +28,8 @@
   "close_after_save_hint": "close popup on word saved",
   "save_settings": "save settings",
   "settings_saved": "settings saved",
+  "settings_denied": "permission denied",
+  "settings_error": "save failed",
   "back": "Back to popup",
   "version": "wordbin v0.1.0",
   "interface_section": "INTERFACE",

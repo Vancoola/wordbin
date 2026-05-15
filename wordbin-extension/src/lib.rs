@@ -6,6 +6,8 @@
 )]
 
 mod api;
+mod chrome_perms;
+mod chrome_tabs;
 mod page;
 mod settings;
 
@@ -28,6 +30,14 @@ enum Page {
     Words,
 }
 
+fn initial_page() -> Page {
+    match chrome_tabs::location_hash().as_str() {
+        "#settings" => Page::Settings,
+        "#words" => Page::Words,
+        _ => Page::Popup,
+    }
+}
+
 #[component]
 fn App() -> impl IntoView {
     let settings = settings::load();
@@ -35,7 +45,7 @@ fn App() -> impl IntoView {
 
     provide_context(RwSignal::new(WordCount { count: 0 }));
 
-    let (page, set_page) = signal(Page::Popup);
+    let (page, set_page) = signal(initial_page());
 
     view! {
         <I18nContextProvider>
@@ -46,7 +56,7 @@ fn App() -> impl IntoView {
                     <PopupPage set_page />
                 }.into_any(),
                 Page::Settings => view! {
-                    <SettingsPage set_page />
+                    <SettingsPage />
                 }.into_any(),
                 Page::Words => view! {
                     <WordsPage set_page />
@@ -80,5 +90,6 @@ fn WordCountSync() -> impl IntoView {
 #[wasm_bindgen(start)]
 pub fn run() {
     console_error_panic_hook::set_once();
+    chrome_tabs::mark_window_mode();
     mount_to_body(App);
 }

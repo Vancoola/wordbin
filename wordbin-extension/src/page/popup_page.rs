@@ -1,6 +1,7 @@
 use crate::Page;
 use crate::api::add_word;
 use crate::i18n::use_i18n;
+use crate::settings::Settings;
 use icondata::{LuCaseSensitive, LuCirclePlus, LuGlobe, LuList, LuSettings};
 use js_sys::futures::JsFuture;
 use leptos::prelude::*;
@@ -19,10 +20,12 @@ enum ToastState {
     ServerError,
 }
 
+#[allow(clippy::too_many_lines)]
 #[component]
 pub fn PopupPage(set_page: WriteSignal<Page>) -> impl IntoView {
     let i18n = use_i18n();
     let word_count = expect_context::<RwSignal<WordCount>>();
+    let settings_ctx = expect_context::<RwSignal<Settings>>();
 
     let (word, set_word) = signal(String::new());
     let (source, set_source) = signal(String::new());
@@ -30,12 +33,14 @@ pub fn PopupPage(set_page: WriteSignal<Page>) -> impl IntoView {
     let (loading, set_loading) = signal(false);
     let (toast, set_toast) = signal(ToastState::Hidden);
 
-    spawn_local(async move {
-        if let Some(url) = get_current_url().await {
-            let hostname = extract_hostname(&url);
-            set_source.set(hostname);
-        }
-    });
+    if settings_ctx.get_untracked().auto_detect_source {
+        spawn_local(async move {
+            if let Some(url) = get_current_url().await {
+                let hostname = extract_hostname(&url);
+                set_source.set(hostname);
+            }
+        });
+    }
 
     let on_save = move || {
         let word_val = word.get();
@@ -63,6 +68,9 @@ pub fn PopupPage(set_page: WriteSignal<Page>) -> impl IntoView {
                 Ok(_) => {
                     set_word.set(String::new());
                     set_notes.set(String::new());
+                    if settings_ctx.get_untracked().close_after_save {
+                        crate::chrome_tabs::close_window();
+                    }
                 }
                 Err(_) => set_toast.set(ToastState::ServerError),
             }
@@ -90,7 +98,11 @@ pub fn PopupPage(set_page: WriteSignal<Page>) -> impl IntoView {
           </div>
 
           <div class="field source-wrap">
-              <label>{t!(i18n, source_label)}" "<span class="hint" id="auto-hint">{t!(i18n, source_hint)}</span></label>
+              <label>{t!(i18n, source_label)}" "
+                {move || settings_ctx.get().auto_detect_source.then(|| view! {
+                    <span class="hint" id="auto-hint">{t!(i18n, source_hint)}</span>
+                })}
+            </label>
               <div class="input-wrap">
                   <Icon icon=LuGlobe />
                   <input prop:value=source on:input=move |e| set_source.set(event_target_value(&e)) id="source-input" type="text" placeholder={move || t_string!(i18n, source_placeholder)} autocomplete="off" spellcheck="false" required />
@@ -130,7 +142,7 @@ pub fn PopupPage(set_page: WriteSignal<Page>) -> impl IntoView {
               <button on:click=move |_| set_page.set(Page::Words) title={move || t_string!(i18n, all_words)}>
                   <Icon icon=LuList />
               </button>
-              <button on:click=move |_| set_page.set(Page::Settings) title={move || t_string!(i18n, settings)} id="settings-btn">
+              <button on:click=move |_| crate::chrome_tabs::open_window("index.html#settings", 420, 640) title={move || t_string!(i18n, settings)} id="settings-btn">
                   <Icon icon=LuSettings />
               </button>
           </div>

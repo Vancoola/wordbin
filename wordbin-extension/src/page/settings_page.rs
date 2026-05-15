@@ -1,26 +1,46 @@
 use crate::api::health_check;
+use crate::chrome_perms::{has_origin, remove_origin, request_origin};
 use crate::i18n::{I18nLocaleTrait, Locale, t, t_string, use_i18n};
+use crate::settings;
 use crate::settings::Settings;
-use crate::{Page, settings};
+use gloo_timers::future::TimeoutFuture;
 use icondata::{LuArrowLeft, LuGlobe, LuSave};
 use leptos::prelude::*;
 use leptos::task::spawn_local;
 use leptos_icons::Icon;
 use std::str::FromStr;
 
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum SaveState {
+    Idle,
+    Saved,
+    Denied,
+    Error,
+}
+
+fn normalize_url(input: &str) -> String {
+    let trimmed = input.trim();
+    if trimmed.is_empty() || trimmed.starts_with("http://") || trimmed.starts_with("https://") {
+        trimmed.to_string()
+    } else {
+        format!("http://{trimmed}")
+    }
+}
+
+fn schedule_toast_clear(state: WriteSignal<SaveState>) {
+    spawn_local(async move {
+        TimeoutFuture::new(2000).await;
+        state.set(SaveState::Idle);
+    });
+}
+
 #[allow(clippy::too_many_lines)]
 #[component]
-pub fn SettingsPage(set_page: WriteSignal<Page>) -> impl IntoView {
+pub fn SettingsPage() -> impl IntoView {
     let i18n = use_i18n();
 
     let (online, set_online) = signal(false);
     let (checking, set_checking) = signal(true);
-
-    spawn_local(async move {
-        let result = health_check().await;
-        set_online.set(result);
-        set_checking.set(false);
-    });
 
     let settings_ctx = expect_context::<RwSignal<Settings>>();
     let initial = settings_ctx.get_untracked();
@@ -29,24 +49,10 @@ pub fn SettingsPage(set_page: WriteSignal<Page>) -> impl IntoView {
     let (server_url, set_server_url) = signal(initial.server_url);
     let (auto_detect, set_auto_detect) = signal(initial.auto_detect_source);
     let (close_after_save, set_close_after_save) = signal(initial.close_after_save);
-
     let (api_token, set_api_token) = signal(initial.api_token);
-
-    let on_save = move || {
-        let updated = Settings {
-            language: language.get(),
-            server_url: server_url.get(),
-            auto_detect_source: auto_detect.get(),
-            close_after_save: close_after_save.get(),
-            api_token: api_token.get(),
-        };
-        settings::save(&updated);
-        settings_ctx.set(updated);
-    };
+    let (save_state, set_save_state) = signal(SaveState::Idle);
 
     Effect::new(move |_| {
-        let _ = server_url.get();
-        set_checking.set(true);
         spawn_local(async move {
             let result = health_check().await;
             set_online.set(result);
@@ -54,10 +60,64 @@ pub fn SettingsPage(set_page: WriteSignal<Page>) -> impl IntoView {
         });
     });
 
+    let on_save = move |_ev: leptos::ev::MouseEvent| {
+        let old_url = settings_ctx.get_untracked().server_url;
+        let raw_url = server_url.get();
+        let url = normalize_url(&raw_url);
+
+        if url != raw_url {
+            set_server_url.set(url.clone());
+        }
+
+        spawn_local(async move {
+            let already = has_origin(&url).await.unwrap_or(false);
+
+            let granted = if already {
+                true
+            } else {
+                match request_origin(&url).await {
+                    Ok(g) => g,
+                    Err(e) => {
+                        web_sys::console::error_1(&e);
+                        set_save_state.set(SaveState::Error);
+                        schedule_toast_clear(set_save_state);
+                        return;
+                    }
+                }
+            };
+
+            if !granted {
+                set_save_state.set(SaveState::Denied);
+                schedule_toast_clear(set_save_state);
+                return;
+            }
+
+            if !old_url.is_empty() && old_url != url {
+                let _ = remove_origin(&old_url).await;
+            }
+
+            let updated = Settings {
+                language: language.get(),
+                server_url: url,
+                auto_detect_source: auto_detect.get(),
+                close_after_save: close_after_save.get(),
+                api_token: api_token.get(),
+            };
+            settings::save(&updated);
+            settings_ctx.set(updated);
+            set_save_state.set(SaveState::Saved);
+            schedule_toast_clear(set_save_state);
+
+            set_checking.set(true);
+            set_online.set(health_check().await);
+            set_checking.set(false);
+        });
+    };
+
     view! {
         <div class="header">
             <div class="header-left">
-                <button class="back-btn" title={move || t_string!(i18n, back)} on:click=move |_| set_page.set(Page::Popup)>
+                <button class="back-btn" title={move || t_string!(i18n, back)} on:click=move |_| crate::chrome_tabs::close_window()>
                     <Icon icon=LuArrowLeft width="14px" height="14px" />
                 </button>
                 <span class="page-title">{t!(i18n, settings_lower)}</span>
@@ -114,19 +174,6 @@ pub fn SettingsPage(set_page: WriteSignal<Page>) -> impl IntoView {
                             placeholder="http://localhost:3000" />
                     </div>
                 </div>
-                <div class="section">
-                <div class="section-label">{t!(i18n, auth_section)}</div>
-                    <div class="setting-row full-row">
-                        <span class="setting-name">{t!(i18n, api_token_label)}</span>
-                        <div class="input-wrap">
-                            <input type="password" id="api-token"
-                                prop:value=api_token
-                                on:input=move |e| set_api_token.set(event_target_value(&e))
-                                placeholder=move || t_string!(i18n, api_token_placeholder) />
-                        </div>
-                        <span class="setting-hint">{t!(i18n, api_token_hint)}</span>
-                    </div>
-                </div>
                 <div class="setting-row" style="margin-top:8px;">
                     <span class="setting-name">{t!(i18n, connection_label)}</span>
                     <div class="status">
@@ -139,6 +186,20 @@ pub fn SettingsPage(set_page: WriteSignal<Page>) -> impl IntoView {
                             }}
                         </span>
                     </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-label">{t!(i18n, auth_section)}</div>
+                <div class="setting-row full-row">
+                    <span class="setting-name">{t!(i18n, api_token_label)}</span>
+                    <div class="input-wrap">
+                        <input type="password" id="api-token"
+                            prop:value=api_token
+                            on:input=move |e| set_api_token.set(event_target_value(&e))
+                            placeholder=move || t_string!(i18n, api_token_placeholder) />
+                    </div>
+                    <span class="setting-hint">{t!(i18n, api_token_hint)}</span>
                 </div>
             </div>
 
@@ -170,14 +231,26 @@ pub fn SettingsPage(set_page: WriteSignal<Page>) -> impl IntoView {
                 </div>
             </div>
 
-            <button on:click=move |_| on_save() class="save-btn">
+            <button on:click=on_save class="save-btn">
                 <Icon icon=LuSave width="12px" height="12px" />
                 {t!(i18n, save_settings)}
             </button>
 
-        </div>
+            <div
+                class="toast"
+                class:success=move || save_state.get() == SaveState::Saved
+                class:error=move || matches!(save_state.get(), SaveState::Denied | SaveState::Error)
+                class:show=move || save_state.get() != SaveState::Idle
+            >
+                {move || match save_state.get() {
+                    SaveState::Saved => t_string!(i18n, settings_saved),
+                    SaveState::Denied => t_string!(i18n, settings_denied),
+                    SaveState::Error => t_string!(i18n, settings_error),
+                    SaveState::Idle => "",
+                }}
+            </div>
 
-        <div class="toast" id="toast">{t!(i18n, settings_saved)}</div>
+        </div>
 
         <div class="version">{t!(i18n, version)}</div>
     }

@@ -19,9 +19,8 @@
     "128": "icons/icon-128.png"
   },
   "permissions": ["storage", "tabs"],
-  "host_permissions": [
-    "http://localhost:3000/*"
-  ],
+  "host_permissions": [],
+  "optional_host_permissions": ["*://*/*"],
   "content_security_policy": {
     "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
   }
