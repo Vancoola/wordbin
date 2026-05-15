@@ -13,10 +13,10 @@ mod state;
 
 use crate::boot::{database, run_app};
 use crate::cli::{Cli, Command, TokenCmd};
-use crate::config::{load_config, AppConfig};
+use crate::config::{AppConfig, load_config};
 use clap::Parser;
 use std::str::FromStr;
-use tracing::{info, Level};
+use tracing::{Level, info};
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
