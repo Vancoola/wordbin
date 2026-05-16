@@ -1,7 +1,17 @@
+#![allow(
+    clippy::match_same_arms,
+    clippy::ignored_unit_patterns,
+    clippy::used_underscore_binding,
+    clippy::default_trait_access
+)]
+
 mod app;
+mod page;
 
 use app::*;
 use leptos::prelude::*;
+
+include!(concat!(env!("OUT_DIR"), "/i18n/mod.rs"));
 
 fn main() {
     console_error_panic_hook::set_once();

@@ -1,17 +1,19 @@
 {
-  "welcome_title": "Bienvenido — vamos a configurar todo",
-  "welcome_sub": "Elige tu idioma y el aspecto de la aplicación. Puedes cambiarlo más tarde en Ajustes.",
-  "interface_language": "Idioma de la interfaz",
-  "theme": "Tema",
-  "theme_light": "Claro",
-  "theme_dark": "Oscuro",
-  "theme_system": "Sistema",
-  "continue_btn": "Continuar",
-  "connect_title": "Conectar a tu servidor",
-  "connect_sub": "Introduce la dirección de tu servidor wordbin y tu token de acceso.",
-  "server_address": "Dirección del servidor",
-  "access_token": "Token de acceso",
-  "test_connection": "Probar conexión",
-  "back_btn": "← Atrás",
-  "finish_setup": "Finalizar configuración"
+  "setup": {
+    "welcome_title": "Bienvenido — vamos a configurar todo",
+    "welcome_sub": "Elige tu idioma y el aspecto de la aplicación. Puedes cambiarlo más tarde en Ajustes.",
+    "interface_language": "Idioma de la interfaz",
+    "theme": "Tema",
+    "theme_light": "Claro",
+    "theme_dark": "Oscuro",
+    "theme_system": "Sistema",
+    "continue_btn": "Continuar",
+    "connect_title": "Conectar a tu servidor",
+    "connect_sub": "Introduce la dirección de tu servidor wordbin y tu token de acceso.",
+    "server_address": "Dirección del servidor",
+    "access_token": "Token de acceso",
+    "test_connection": "Probar conexión",
+    "back_btn": "← Atrás",
+    "finish_setup": "Finalizar configuración"
+  }
 }

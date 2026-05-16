@@ -1,17 +1,19 @@
 {
-  "welcome_title": "Willkommen — richten wir alles ein",
-  "welcome_sub": "Wähle deine Sprache und das Erscheinungsbild der App. Du kannst dies später in den Einstellungen ändern.",
-  "interface_language": "Sprache",
-  "theme": "Design",
-  "theme_light": "Hell",
-  "theme_dark": "Dunkel",
-  "theme_system": "System",
-  "continue_btn": "Weiter",
-  "connect_title": "Mit deinem Server verbinden",
-  "connect_sub": "Gib die Adresse deines wordbin-Servers und deinen Zugriffstoken ein.",
-  "server_address": "Serveradresse",
-  "access_token": "Zugriffstoken",
-  "test_connection": "Verbindung testen",
-  "back_btn": "← Zurück",
-  "finish_setup": "Einrichtung abschließen"
+  "setup": {
+    "welcome_title": "Willkommen — richten wir alles ein",
+    "welcome_sub": "Wähle deine Sprache und das Erscheinungsbild der App. Du kannst dies später in den Einstellungen ändern.",
+    "interface_language": "Sprache",
+    "theme": "Design",
+    "theme_light": "Hell",
+    "theme_dark": "Dunkel",
+    "theme_system": "System",
+    "continue_btn": "Weiter",
+    "connect_title": "Mit deinem Server verbinden",
+    "connect_sub": "Gib die Adresse deines wordbin-Servers und deinen Zugriffstoken ein.",
+    "server_address": "Serveradresse",
+    "access_token": "Zugriffstoken",
+    "test_connection": "Verbindung testen",
+    "back_btn": "← Zurück",
+    "finish_setup": "Einrichtung abschließen"
+  }
 }
