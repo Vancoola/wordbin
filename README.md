@@ -203,9 +203,3 @@ Then load `wordbin-extension/dist/` into Chrome:
 ## Status
 
 Active development since May 2026. Schema will change. Built for myself — issues and PRs welcome, no guarantees.
-
----
-
-## License
-
-Apache-2.0
