@@ -1,0 +1,17 @@
+{
+  "welcome_title": "Bienvenue — configurons tout",
+  "welcome_sub": "Choisissez votre langue et l'apparence de l'application. Vous pourrez modifier cela plus tard dans les paramètres.",
+  "interface_language": "Langue de l'interface",
+  "theme": "Thème",
+  "theme_light": "Clair",
+  "theme_dark": "Sombre",
+  "theme_system": "Système",
+  "continue_btn": "Continuer",
+  "connect_title": "Connecter à votre serveur",
+  "connect_sub": "Entrez l'adresse de votre serveur wordbin et votre jeton d'accès.",
+  "server_address": "Adresse du serveur",
+  "access_token": "Jeton d'accès",
+  "test_connection": "Tester la connexion",
+  "back_btn": "← Retour",
+  "finish_setup": "Terminer la configuration"
+}

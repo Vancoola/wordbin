@@ -1,0 +1,17 @@
+{
+  "welcome_title": "欢迎 — 让我们开始设置",
+  "welcome_sub": "选择您的语言和应用外观，稍后可在设置中更改。",
+  "interface_language": "界面语言",
+  "theme": "主题",
+  "theme_light": "浅色",
+  "theme_dark": "深色",
+  "theme_system": "跟随系统",
+  "continue_btn": "继续",
+  "connect_title": "连接到您的服务器",
+  "connect_sub": "输入您的 wordbin 服务器地址和访问令牌。",
+  "server_address": "服务器地址",
+  "access_token": "访问令牌",
+  "test_connection": "测试连接",
+  "back_btn": "← 返回",
+  "finish_setup": "完成设置"
+}

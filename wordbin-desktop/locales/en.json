@@ -1,0 +1,19 @@
+{
+  "setup": {
+    "welcome_title": "Welcome — let's set things up",
+    "welcome_sub": "Choose your language and how the app looks. You can change these later in Settings.",
+    "interface_language": "Interface language",
+    "theme": "Theme",
+    "theme_light": "Light",
+    "theme_dark": "Dark",
+    "theme_system": "System",
+    "continue_btn": "Continue",
+    "connect_title": "Connect to your server",
+    "connect_sub": "Enter the address of your wordbin server and your access token.",
+    "server_address": "Server address",
+    "access_token": "Access token",
+    "test_connection": "Test connection",
+    "back_btn": "← Back",
+    "finish_setup": "Finish setup"
+  }
+}
