@@ -24,7 +24,7 @@ leptos_i18n_build = "0.6.2"
 workspace = true
 
 [workspace]
-members = ["src-tauri"]
+members = ["shared-types","src-tauri"]
 
 [workspace.package]
 license = "Apache-2.0"

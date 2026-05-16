@@ -1,5 +1,6 @@
 use crate::i18n::{use_i18n, Locale};
 use leptos::prelude::*;
+use leptos::reactive::spawn_local;
 use leptos_i18n::t;
 
 #[derive(Clone, Copy, PartialEq, Eq)]
@@ -34,6 +35,12 @@ pub fn SetupPage() -> impl IntoView {
             }
         }
     });
+    
+    let on_finish = move || {
+        spawn_local(async move {
+            
+        });
+    };
 
     view! {
         <div class="card">
@@ -164,7 +171,7 @@ pub fn SetupPage() -> impl IntoView {
                     <button class="back-btn" on:click=move |_| set_step.set(0)>
                         {t!(i18n, setup.back_btn)}
                     </button>
-                    <button class="next-btn" disabled>
+                    <button class="next-btn" disabled on:click=move |_| on_finish()>
                         {t!(i18n, setup.finish_setup)}
                     </button>
                 </div>
