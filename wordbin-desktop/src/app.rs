@@ -6,11 +6,12 @@ use leptos_router::components::{Route, Router, Routes};
 use leptos_router::hooks::use_navigate;
 use leptos_router::{path, NavigateOptions};
 use wasm_bindgen::prelude::*;
+use crate::page::home_page::HomePage;
 
 #[wasm_bindgen]
 extern "C" {
     #[wasm_bindgen(js_namespace = ["window", "__TAURI__", "core"])]
-    async fn invoke(cmd: &str, args: JsValue) -> JsValue;
+    pub async fn invoke(cmd: &str, args: JsValue) -> JsValue;
 }
 
 #[component]
@@ -28,6 +29,7 @@ pub fn App() -> impl IntoView {
             <RedirectGuard setup_done=setup_done />
             <I18nContextProvider>
                 <Routes fallback=|| "Not found">
+                    <Route path=path!("/") view=HomePage />
                     <Route path=path!("/setup") view=SetupPage />
                 </Routes>
             </I18nContextProvider>

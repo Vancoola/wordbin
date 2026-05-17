@@ -6,6 +6,7 @@
 )]
 
 mod app;
+mod locale;
 mod page;
 
 use app::*;

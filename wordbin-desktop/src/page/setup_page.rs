@@ -1,21 +1,30 @@
+use crate::app::invoke;
 use crate::i18n::{use_i18n, Locale};
 use leptos::prelude::*;
 use leptos::reactive::spawn_local;
 use leptos_i18n::t;
+use leptos_router::hooks::use_navigate;
+use leptos_router::NavigateOptions;
+use serde::Serialize;
+use shared_types::settings::{Settings, Theme};
 
-#[derive(Clone, Copy, PartialEq, Eq)]
-enum Theme {
-    Light,
-    Dark,
-    System,
+#[derive(Serialize)]
+struct SetSettingsArgs {
+    settings: Settings,
+}
+#[derive(Serialize)]
+struct SetDoneArgs {
+    done: bool,
 }
 
 #[component]
 pub fn SetupPage() -> impl IntoView {
     let i18n = use_i18n();
+    let navigate = use_navigate();
 
     let (step, set_step) = signal(0u8);
     let (theme, set_theme) = signal(Theme::System);
+    let (server_url, set_server_url) = signal(String::new());
 
     Effect::new(move |_| {
         let value = match theme.get() {
@@ -35,11 +44,22 @@ pub fn SetupPage() -> impl IntoView {
             }
         }
     });
-    
+
     let on_finish = move || {
+        let settings = Settings {
+            theme: theme.get_untracked(),
+            server_url: server_url.get_untracked(),
+            language: i18n.get_locale().into(),
+        };
+
         spawn_local(async move {
-            
+            let args = serde_wasm_bindgen::to_value(&SetSettingsArgs { settings }).unwrap();
+            invoke("set_settings", args).await;
+            let args = serde_wasm_bindgen::to_value(&SetDoneArgs { done: true }).unwrap();
+            invoke("set_setup_done", args).await;
         });
+
+        navigate("/", NavigateOptions::default());
     };
 
     view! {
@@ -149,7 +169,12 @@ pub fn SetupPage() -> impl IntoView {
                 <div class="field-label">{t!(i18n, setup.server_address)}</div>
                 <div class="input-wrap" style="margin-bottom: 14px;">
                     <i class="ti ti-server" aria-hidden="true"></i>
-                    <input type="text" placeholder="http://localhost:3000" />
+                    <input
+                        type="text"
+                        placeholder="http://localhost:3000"
+                        prop:value=server_url
+                        on:input=move |e| set_server_url.set(event_target_value(&e))
+                    />
                 </div>
 
                 <div class="field-label">{t!(i18n, setup.access_token)}</div>
@@ -171,7 +196,7 @@ pub fn SetupPage() -> impl IntoView {
                     <button class="back-btn" on:click=move |_| set_step.set(0)>
                         {t!(i18n, setup.back_btn)}
                     </button>
-                    <button class="next-btn" disabled on:click=move |_| on_finish()>
+                    <button class="next-btn" on:click=move |_| on_finish()>
                         {t!(i18n, setup.finish_setup)}
                     </button>
                 </div>
@@ -203,7 +228,6 @@ fn ThemeOption(
     theme: ReadSignal<Theme>,
     set_theme: WriteSignal<Theme>,
 ) -> impl IntoView {
-
     let i18n = use_i18n();
 
     let icon_class = format!("ti {icon}");
