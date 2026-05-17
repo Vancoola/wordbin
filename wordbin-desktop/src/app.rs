@@ -1,13 +1,14 @@
 use crate::i18n::I18nContextProvider;
+use crate::layout::app_layout::AppLayout;
 use crate::page::setup_page::SetupPage;
+use crate::page::words::words_page::WordsPage;
 use leptos::prelude::*;
 use leptos::task::spawn_local;
 use leptos_meta::provide_meta_context;
-use leptos_router::components::{Route, Router, Routes};
+use leptos_router::components::{ParentRoute, Route, Router, Routes};
 use leptos_router::hooks::use_navigate;
 use leptos_router::{path, NavigateOptions};
 use wasm_bindgen::prelude::*;
-use crate::page::home_page::HomePage;
 
 #[wasm_bindgen]
 extern "C" {
@@ -17,7 +18,6 @@ extern "C" {
 
 #[component]
 pub fn App() -> impl IntoView {
-
     provide_meta_context();
 
     let (setup_done, set_setup_done) = signal::<Option<bool>>(None);
@@ -33,8 +33,10 @@ pub fn App() -> impl IntoView {
             <RedirectGuard setup_done=setup_done />
             <I18nContextProvider>
                 <Routes fallback=|| "Not found">
-                    <Route path=path!("/") view=HomePage />
                     <Route path=path!("/setup") view=SetupPage />
+                    <ParentRoute path=path!("/") view=AppLayout>
+                        <Route path=path!("")    view=WordsPage />
+                    </ParentRoute>
                 </Routes>
             </I18nContextProvider>
         </Router>

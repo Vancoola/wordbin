@@ -6,6 +6,7 @@
 )]
 
 mod app;
+mod layout;
 mod locale;
 mod page;
 

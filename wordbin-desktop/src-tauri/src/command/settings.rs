@@ -7,8 +7,7 @@ pub async fn get_setup_done(app: tauri::AppHandle) -> bool {
     store
         .get("setup_done")
         .and_then(|v| v.as_bool())
-        .unwrap_or(false);
-    false
+        .unwrap_or(false)
 }
 
 #[tauri::command]
