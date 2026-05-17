@@ -28,7 +28,6 @@ pub async fn get_settings(app: tauri::AppHandle) -> Settings {
 
 #[tauri::command]
 pub async fn set_settings(app: tauri::AppHandle, settings: Settings) -> Result<(), String> {
-    println!("Setting {}", settings.server_url);
     let store = app.store("settings.json").map_err(|e| e.to_string())?;
     store.set("settings", serde_json::to_value(&settings).unwrap());
     store.save().map_err(|e| e.to_string())

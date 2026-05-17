@@ -26,6 +26,7 @@ pub fn SetupPage() -> impl IntoView {
     let (step, set_step) = signal(0u8);
     let (theme, set_theme) = signal(Theme::System);
     let (server_url, set_server_url) = signal(String::new());
+    let (jwt, set_jwt) = signal(String::new());
 
     Effect::new(move |_| {
         let value = match theme.get() {
@@ -183,7 +184,12 @@ pub fn SetupPage() -> impl IntoView {
                 <div class="field-label">{t!(i18n, setup.access_token)}</div>
                 <div class="input-wrap" style="margin-bottom: 16px;">
                     <i class="ti ti-lock" aria-hidden="true"></i>
-                    <input type="password" placeholder="••••••••••••••••" />
+                    <input
+                        type="password"
+                        placeholder="••••••••••••••••"
+                        prop:value=jwt
+                        on:input=move |e| set_jwt.set(event_target_value(&e))
+                    />
                 </div>
 
                 <button class="connect-btn">

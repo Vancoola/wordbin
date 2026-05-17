@@ -1,9 +1,11 @@
+use crate::handler::server::server_status;
 use crate::handler::word::{active_word_handler, add_word_handler, word_count_handler};
 use crate::state::AppState;
 use axum::Router;
 use axum::routing::{get, post};
 
 mod auth;
+pub mod server;
 pub mod word;
 
 pub fn word_router() -> Router<AppState> {
@@ -13,7 +15,6 @@ pub fn word_router() -> Router<AppState> {
         .route("/active", get(active_word_handler))
 }
 
-#[utoipa::path(get, path = "/healthz", tag = "status")]
-pub async fn health_check() -> axum::http::StatusCode {
-    axum::http::StatusCode::OK
+pub fn server_router() -> Router<AppState> {
+    Router::new().route("/status", get(server_status))
 }

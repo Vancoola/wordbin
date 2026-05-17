@@ -1,5 +1,6 @@
 use crate::config::AppConfig;
-use crate::handler::{health_check, word_router};
+use crate::handler::server::health_check;
+use crate::handler::{server_router, word_router};
 use crate::openapi::ApiDoc;
 use crate::state::AppState;
 use axum::Router;
@@ -24,6 +25,7 @@ pub(crate) async fn run_app(app_config: AppConfig, pool: SqlitePool) -> anyhow::
 
     let app = Router::new()
         .route("/healthz", get(health_check))
+        .nest("/server", server_router())
         .nest("/word", word_router())
         .merge(SwaggerUi::new("/swagger-ui").url("/api-docs/openapi.json", ApiDoc::openapi()))
         .layer(cors)

@@ -27,7 +27,7 @@ impl fmt::Display for Status {
     }
 }
 
-#[derive(Debug, Serialize, sqlx::Type)]
+#[derive(Debug, Serialize, sqlx::Type, Clone)]
 #[sqlx(transparent)]
 pub struct WordId(pub i64);
 impl WordId {

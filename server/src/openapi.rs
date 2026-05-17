@@ -1,4 +1,5 @@
-use crate::handler::__path_health_check;
+use crate::handler::server::__path_server_status;
+use crate::handler::server::__path_health_check;
 use crate::handler::word::__path_active_word_handler;
 use crate::handler::word::__path_add_word_handler;
 use crate::handler::word::__path_word_count_handler;
@@ -12,7 +13,8 @@ use wordbin_types::word::CreateWord;
         add_word_handler,
         word_count_handler,
         active_word_handler,
-        health_check
+        health_check,
+        server_status
     ),
     components (
         schemas (
@@ -22,15 +24,14 @@ use wordbin_types::word::CreateWord;
     tags (
         (name="word", description=""),
         (name="auth", description=""),
-        (name="status", description="")
+        (name="server", description="")
     ),
     info(
         title="Wordbin API",
         version="0.1.0",
         description="API Documentation",
         license(
-            name="Apache-2.0",
-            url="https://www.apache.org/licenses/",
+            name="AGPL-3"
         ),
     ),
     modifiers(&SecurityAddon)

@@ -1,6 +1,6 @@
 use crate::error::AppError;
 use crate::extract::auth::Authenticated;
-use crate::repo::review::create_review;
+use crate::repo::review::create_card;
 use crate::repo::word::{active_words, create_new_word, word_count};
 use crate::state::AppState;
 use axum::extract::{Query, State};
@@ -24,7 +24,7 @@ pub async fn add_word_handler(
     Json(payload): Json<CreateWord>,
 ) -> Result<(StatusCode, Json<WordCreatedId>), AppError> {
     let word_id = create_new_word(payload, &app_state.db).await?;
-    create_review(&word_id, &app_state.db).await?;
+    create_card(&word_id, &app_state.db).await?;
 
     Ok((StatusCode::CREATED, Json(WordCreatedId(word_id.0))))
 }
