@@ -2,6 +2,7 @@ use crate::i18n::I18nContextProvider;
 use crate::page::setup_page::SetupPage;
 use leptos::prelude::*;
 use leptos::task::spawn_local;
+use leptos_meta::provide_meta_context;
 use leptos_router::components::{Route, Router, Routes};
 use leptos_router::hooks::use_navigate;
 use leptos_router::{path, NavigateOptions};
@@ -16,6 +17,9 @@ extern "C" {
 
 #[component]
 pub fn App() -> impl IntoView {
+
+    provide_meta_context();
+
     let (setup_done, set_setup_done) = signal::<Option<bool>>(None);
 
     spawn_local(async move {

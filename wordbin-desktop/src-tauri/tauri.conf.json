@@ -14,8 +14,12 @@
     "windows": [
       {
         "title": "Wordbin",
-        "width": 800,
-        "height": 600
+        "width": 1200,
+        "height": 780,
+        "minWidth": 800,
+        "minHeight": 560,
+        "resizable": true,
+        "center": true
       }
     ],
     "security": {

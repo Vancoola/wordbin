@@ -3,6 +3,7 @@ use crate::i18n::{use_i18n, Locale};
 use leptos::prelude::*;
 use leptos::reactive::spawn_local;
 use leptos_i18n::t;
+use leptos_meta::Stylesheet;
 use leptos_router::hooks::use_navigate;
 use leptos_router::NavigateOptions;
 use serde::Serialize;
@@ -63,6 +64,8 @@ pub fn SetupPage() -> impl IntoView {
     };
 
     view! {
+        <Stylesheet href="/setup.css" />
+        <div class="setup-page">
         <div class="card">
             <div class="logo-row">
                 <div class="logo-icon">
@@ -201,6 +204,7 @@ pub fn SetupPage() -> impl IntoView {
                     </button>
                 </div>
             </div>
+        </div>
         </div>
     }
 }

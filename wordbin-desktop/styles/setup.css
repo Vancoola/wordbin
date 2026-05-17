@@ -1,72 +1,10 @@
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-:root {
-    --bg-primary:   #ffffff;
-    --bg-secondary: #f5f5f3;
-    --bg-tertiary:  #eeede9;
-    --text-primary:   #1a1a18;
-    --text-secondary: #5f5e5a;
-    --text-tertiary:  #888780;
-    --border:       rgba(0,0,0,0.10);
-    --border-mid:   rgba(0,0,0,0.18);
-    --teal-main:    #1D9E75;
-    --teal-dark:    #0F6E56;
-    --teal-light:   #E1F5EE;
-    --teal-mid:     #9FE1CB;
-    --teal-text:    #0F6E56;
-    --dot-idle:     rgba(0,0,0,0.15);
-    --status-ok:    #1D9E75;
-    --status-warn:  #EF9F27;
-    --status-error: #E24B4A;
-    --radius-md: 8px;
-    --radius-lg: 12px;
-}
-
-:root[data-theme="dark"] {
-    --bg-primary:   #1e1e1c;
-    --bg-secondary: #161614;
-    --bg-tertiary:  #111110;
-    --text-primary:   #f0ede4;
-    --text-secondary: #a8a7a1;
-    --text-tertiary:  #636260;
-    --border:       rgba(255,255,255,0.08);
-    --border-mid:   rgba(255,255,255,0.14);
-    --teal-main:    #1D9E75;
-    --teal-dark:    #5DCAA5;
-    --teal-light:   #04342C;
-    --teal-mid:     #085041;
-    --teal-text:    #5DCAA5;
-    --dot-idle:     rgba(255,255,255,0.15);
-}
-
-@media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-        --bg-primary:   #1e1e1c;
-        --bg-secondary: #161614;
-        --bg-tertiary:  #111110;
-        --text-primary:   #f0ede4;
-        --text-secondary: #a8a7a1;
-        --text-tertiary:  #636260;
-        --border:       rgba(255,255,255,0.08);
-        --border-mid:   rgba(255,255,255,0.14);
-        --teal-main:    #1D9E75;
-        --teal-dark:    #5DCAA5;
-        --teal-light:   #04342C;
-        --teal-mid:     #085041;
-        --teal-text:    #5DCAA5;
-        --dot-idle:     rgba(255,255,255,0.15);
-    }
-}
-
-body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: var(--bg-tertiary);
+.setup-page {
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 32px 16px;
-    transition: background 0.2s;
+    background: var(--bg-tertiary);
 }
 
 .card {
@@ -86,10 +24,13 @@ body {
 }
 
 .logo-icon {
-    width: 28px; height: 28px;
+    width: 28px;
+    height: 28px;
     background: var(--teal-main);
     border-radius: 6px;
-    display: flex; align-items: center; justify-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .logo-icon i { color: #fff; font-size: 15px; }
@@ -101,6 +42,7 @@ body {
     letter-spacing: -0.3px;
 }
 
+/* ── Step indicator ── */
 .step-dots {
     display: flex;
     gap: 6px;
@@ -135,6 +77,7 @@ body {
 .step { display: none; }
 .step.active { display: block; }
 
+/* ── Form fields ── */
 .field-label {
     font-size: 12px;
     font-weight: 500;
@@ -207,6 +150,7 @@ body {
     color: var(--teal-text);
 }
 
+/* ── Inputs ── */
 .input-wrap {
     position: relative;
     margin-bottom: 12px;
@@ -214,7 +158,8 @@ body {
 
 .input-wrap i {
     position: absolute;
-    left: 10px; top: 50%;
+    left: 10px;
+    top: 50%;
     transform: translateY(-50%);
     font-size: 15px;
     color: var(--text-tertiary);
@@ -231,12 +176,13 @@ body {
     color: var(--text-primary);
     outline: none;
     transition: border-color 0.15s, background 0.2s;
-    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-family: var(--font-mono);
 }
 
 .input-wrap input:focus { border-color: var(--teal-main); }
-.input-wrap input::placeholder { color: var(--text-tertiary); font-family: inherit; }
+.input-wrap input::placeholder { color: var(--text-tertiary); font-family: var(--font-sans); }
 
+/* ── Connect test button ── */
 .connect-btn {
     width: 100%;
     padding: 9px;
@@ -253,6 +199,7 @@ body {
 
 .connect-btn:hover { background: var(--bg-secondary); }
 
+/* ── Connection status block ── */
 .status-block {
     border: 0.5px solid var(--border);
     border-radius: var(--radius-md);
@@ -272,7 +219,8 @@ body {
 }
 
 .status-dot {
-    width: 7px; height: 7px;
+    width: 7px;
+    height: 7px;
     border-radius: 50%;
     background: var(--text-tertiary);
     flex-shrink: 0;
@@ -314,6 +262,7 @@ body {
     margin-top: 2px;
 }
 
+/* ── Footer (nav buttons) ── */
 .footer {
     display: flex;
     align-items: center;
